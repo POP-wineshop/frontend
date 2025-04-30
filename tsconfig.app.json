@@ -1,26 +1,43 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
+    /* ======== Alias 설정 ======== */
+    "baseUrl": "./src", // 경로의 기준을 src 폴더로 설정
+    "paths": {
+      "@/*": ["*"] // @를 src 폴더로 매핑해서 import할 수 있게 설정
+    },
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
+    /* ======== tsbuild info ======== */
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo", // 타입스크립트 빌드 캐시 파일 저장 위치
 
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    /* ======== 컴파일 대상 환경 설정 ======== */
+    "target": "ES2020", // 컴파일 결과 자바스크립트 버전
+    "useDefineForClassFields": true, // 클래스 필드 정의를 더 표준적인 방식으로 처리
+
+    /* ======== 사용할 라이브러리 ======== */
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // 사용할 기본 라이브러리 (JS + 브라우저 관련)
+
+    /* ======== 모듈 설정 ======== */
+    "module": "ESNext", // 모듈 시스템을 최신 모듈 방식으로 설정
+    "skipLibCheck": true, // 라이브러리 타입 검사 건너뛰기 (속도 향상)
+
+    /* ======== 번들러 관련 설정 ======== */
+    "moduleResolution": "bundler", // 번들러 전용 모듈 해석 방식 사용 (ex. Vite)
+    "allowImportingTsExtensions": true, // import할 때 .ts 확장자까지 명시해도 허용
+    "isolatedModules": true, // 파일 단위 모듈 격리 (Vite나 SWC 빌드용 필수)
+    "moduleDetection": "force", // 모듈로 취급할 파일 강제 감지
+    "noEmit": true, // ts파일을 js로 출력하지 않음 (Vite가 대신 번들링)
+
+    /* ======== JSX 관련 설정 ======== */
+    "jsx": "react-jsx", // React 17 이상용 JSX 변환 방식 사용 (자동 import)
+
+    /* ======== Linting(코드 검사) 강화 ======== */
+    "strict": true, // 타입스크립트 엄격 모드 활성화
+    "noUnusedLocals": true, // 안 쓰는 지역변수 있으면 에러
+    "noUnusedParameters": true, // 안 쓰는 함수 파라미터 있으면 에러
+    "noFallthroughCasesInSwitch": true, // switch문에서 case 빠져나가는 거 체크
+    "noUncheckedSideEffectImports": true // 사이드 이펙트 있는 import 감시 (파일 임포트할 때 안전성 체크)
   },
-  "include": ["src"]
+
+  /* ======== 포함할 파일 범위 ======== */
+  "include": ["src"] // src 폴더 안 파일들만 타입 검사 대상으로 포함
 }
