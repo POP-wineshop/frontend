@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 #root {
-  max-width: 1280px; /* 일반적인 웹사이트 가로 길이 */
+  max-width: 960px; /* 일반적인 웹사이트 가로 길이 */
   margin: 0 auto; /* 가운데 정렬 */
   padding: 0 1rem; /* 좌우 여백 살짝 주기 */
 }
