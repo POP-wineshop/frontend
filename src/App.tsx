@@ -12,10 +12,11 @@ function App() {
     <>
       <div className="layout">
         <Header />
+
         <main>
           <Routes>
-            <Route path="/" element={<WineListPage />} />
-            <Route path="/description" element={<WineDescriptionPage />} />
+            <Route path="/list" element={<WineListPage />} />
+            <Route path="/description:id" element={<WineDescriptionPage />} />
             <Route path="/order" element={<OrderPage />} />
             <Route path="/cart" element={<CartPage />} />
           </Routes>
