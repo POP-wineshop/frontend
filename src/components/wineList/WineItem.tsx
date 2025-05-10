@@ -1,13 +1,47 @@
 import { useState } from 'react';
 import DuckhornMerlot from '@/assets/wineItem/Duckhorn_Napa Valley_Merlot.png';
+import { useNavigate } from 'react-router-dom';
 
-const WineItem = () => {
+type Wine = {
+  id: number;
+  price: number;
+  vintage: number;
+  country: string;
+  grapeVariety: string;
+  region: string;
+  alcoholContent: number;
+  imageUrl: string;
+  tasteProfile: {
+    sweetness: number;
+    acidity: number;
+    body: number;
+  };
+  wineType: string;
+  stock: number;
+  korName: string;
+  engName: string;
+};
+
+type WineItemProps = {
+  wineData: Wine; // 여기서 any 대신 Wine 타입 쓰는 게 더 좋아
+};
+
+const WineItem = ({ wineData }: WineItemProps) => {
+  const navigate = useNavigate();
+
   const [wineNameEng, setWineNameEng] = useState<string>('');
   const [wineNameKor, setWineNameKor] = useState<string>('');
 
   return (
     <>
-      <div className="wine-item w-full flex flex-col items-center bg-white rounded-lg p-4 h-96">
+      <div
+        className="wine-item w-full flex flex-col items-center bg-white rounded-lg p-4 h-96"
+        onClick={() => {
+          navigate(`/description/${wineData.id}`, {
+            state: { id: `${wineData.id}` },
+          });
+        }}
+      >
         <div className="w-full h-3/4 flex items-center justify-center overflow-hidden border ">
           <img
             src={DuckhornMerlot}
