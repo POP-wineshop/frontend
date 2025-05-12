@@ -3,6 +3,10 @@ import WineDescriptionPage from './pages/WineDescriptionPage';
 import OrderPage from './pages/OrderPage';
 import CartPage from './pages/CartPage';
 
+import WinePostPage from './pages/WinePostPage';
+
+import WineApiTestPage from './pages/WineApiTestPage';
+
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/common/Header';
@@ -12,13 +16,16 @@ function App() {
     <>
       <div className="layout">
         <Header />
-
         <main>
           <Routes>
             <Route path="/list" element={<WineListPage />} />
-            <Route path="/description:id" element={<WineDescriptionPage />} />
+            <Route path="/description/:id" element={<WineDescriptionPage />} />
             <Route path="/order" element={<OrderPage />} />
             <Route path="/cart" element={<CartPage />} />
+
+            <Route path="/post" element={<WinePostPage />} />
+
+            <Route path="/apitest" element={<WineApiTestPage />} />
           </Routes>
         </main>
       </div>
