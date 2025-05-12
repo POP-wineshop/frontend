@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react';
 import DuckhornMerlot from '@/assets/wineItem/Duckhorn_Napa Valley_Merlot.png';
 import { Heart, HeartPlus } from 'lucide-react';
 
-type Props = {
-  handleOpenModal: () => void;
-};
+type Props = {};
 
-const WineDescriptionTop: React.FC<Props> = ({ handleOpenModal }) => {
+const WineDescriptionTop: React.FC<Props> = () => {
   const [wineNameEng, setWineNameEng] = useState<string>('');
   const [wineNameKor, setWineNameKor] = useState<string>('');
   const [isLiked, setIsLiked] = useState<boolean>(false);
@@ -119,10 +117,7 @@ const WineDescriptionTop: React.FC<Props> = ({ handleOpenModal }) => {
             </div>
           </div>
           <div className="wine-description-buttons flex items-center gap-2">
-            <button
-              onClick={handleOpenModal}
-              className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold"
-            >
+            <button className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold">
               주문하기
             </button>
             <button className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold">
