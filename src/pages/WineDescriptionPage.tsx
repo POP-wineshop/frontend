@@ -1,25 +1,56 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import WineFilter from '../components/common/WineFilter';
 import WineDescriptionBottom from '../components/wineDescription/WineDescriptionBottom';
 import WineDescriptionTop from '../components/wineDescription/WineDescriptionTop';
 import OrderModal from '../components/wineDescription/OrderModal';
+import { useLocation } from 'react-router-dom';
+
+type Wine = {
+  id: number;
+  price: number;
+  vintage: number;
+  country: string;
+  grapeVariety: string;
+  region: string;
+  alcoholContent: number;
+  imageUrl: string;
+  tasteProfile: {
+    sweetness: number;
+    acidity: number;
+    body: number;
+  };
+  wineType: string;
+  stock: number;
+  korName: string;
+  engName: string;
+};
 
 const WineDescriptionPage = () => {
+  // WineListPage 내 WineItem에서 받아온 id값
+  const location = useLocation();
+
+  const [wineData, setWineData] = useState<Wine>();
+
   const [isModalOn, setIsModalOn] = useState<boolean>(false);
 
-  const handleOpenModal = () => {
-    setIsModalOn(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOn(false);
-  };
+  useEffect(() => {
+    fetch(`http://localhost:8080/api/wines/${location.state.id}`)
+      .then((response) => response.json())
+      .then((jsonResponse) => {
+        console.log(
+          `GET 요청 (api/wines/${location.state.id}) 응답: `,
+          jsonResponse.data
+        );
+        setWineData(jsonResponse.data);
+      })
+      .catch((error) => console.error(`/api/wines 실행 오류 발생: `, error));
+  }, []);
 
   return (
     <>
       <WineFilter />
       <div className="wine-description min-w-[900px]">
-        <WineDescriptionTop handleOpenModal={handleOpenModal} />
+        <WineDescriptionTop />
         <WineDescriptionBottom />
       </div>
 
