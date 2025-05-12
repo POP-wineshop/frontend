@@ -47,7 +47,7 @@ const WineListPage = () => {
         setWineList(jsonResponse.data);
       })
       .catch((error) => console.error(`/api/wines 실행 오류 발생: `, error));
-  });
+  }, []);
 
   // 전체 데이터 개수 가져오기
 
