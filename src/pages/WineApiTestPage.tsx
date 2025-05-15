@@ -97,6 +97,13 @@ const WineApiTestPage = () => {
             <option value="">-------- APIs --------</option>
 
             <option value="" disabled>
+              ** 관리자 등록 **
+            </option>
+            <option value="api/admin/wines">
+              &lt;POST&gt; api/admin/wines
+            </option>
+
+            <option value="" disabled>
               ** 와인 조회 **
             </option>
             <option value="api/wines">&lt;GET&gt; api/wines</option>
@@ -108,21 +115,14 @@ const WineApiTestPage = () => {
             </option>
 
             <option value="" disabled>
-              ** 관리자 등록 **
-            </option>
-            <option value="api/admin/wines">
-              &lt;POST&gt; api/admin/wines
-            </option>
-
-            <option value="" disabled>
               ** 회원 정보 **
+            </option>
+            <option value="api/auth/signup">
+              &lt;POST&gt; api/auth/signup
             </option>
             <option value="api/auth/login">&lt;POST&gt; api/auth/login</option>
             <option value="api/auth/refresh">
               &lt;POST&gt; api/auth/refresh
-            </option>
-            <option value="api/auth/signup">
-              &lt;POST&gt; api/auth/signup
             </option>
 
             <option value="" disabled>
@@ -230,7 +230,9 @@ const WineApiTestPage = () => {
 
         {/* 응답 결과 영역 */}
         <div>
-          <h2 className="font-semibold">API RESPONSE (ENDPOINT: {endPoint})</h2>
+          <h2 className="font-semibold">
+            API RESPONSE (METHOD: {method} / ENDPOINT: {endPoint})
+          </h2>
           <pre className="p-3 bg-gray-100 rounded-md overflow-x-auto text-sm text-gray-800">
             {JSON.stringify(response, null, 2)}
           </pre>
