@@ -8,14 +8,26 @@ import WinePostPage from './pages/WinePostPage';
 import WineApiTestPage from './pages/WineApiTestPage';
 
 import './App.css';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/common/Header';
+import BackOfficePage from './pages/BackOfficePage';
+import WineFilter from './components/common/WineFilter';
 
 function App() {
+  const location = useLocation();
+  const shouldShowHeader =
+    !location.pathname.startsWith(`/apitest`) &&
+    !location.pathname.startsWith(`/backoffice`) &&
+    !location.pathname.startsWith(`/post`);
+  const shouldShowWineFilter =
+    location.pathname.startsWith(`/list`) ||
+    location.pathname.startsWith(`/description`);
+
   return (
     <>
       <div className="layout">
-        <Header />
+        {shouldShowHeader ? <Header /> : null}
+        {shouldShowWineFilter ? <WineFilter /> : null}
         <main>
           <Routes>
             <Route path="/list" element={<WineListPage />} />
@@ -24,8 +36,9 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
 
             <Route path="/post" element={<WinePostPage />} />
-
             <Route path="/apitest" element={<WineApiTestPage />} />
+
+            <Route path="/backoffice" element={<BackOfficePage />} />
           </Routes>
         </main>
       </div>
