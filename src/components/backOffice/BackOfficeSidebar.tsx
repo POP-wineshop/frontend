@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const BackOfficeSidebar = () => {
   const [shouldShowProductsMenu, setShouldShowProductsMenu] =
@@ -8,11 +8,16 @@ const BackOfficeSidebar = () => {
   const [shouldShowOrdersMenu, setShouldShowOrdersMenu] =
     useState<boolean>(false);
 
+  const [selectedMenu, setSelectedMenu] = useState<string>('');
+
   return (
     <>
-      <div className="sidebar-container flex flex-col">
+      <div className="sidebar-container flex flex-col ">
         <div className="dashboard-container ">
-          <div className="dashboard-title border px-8 py-2">
+          <div
+            className="dashboard-title border px-8 py-2"
+            onClick={() => setSelectedMenu(`dashboard`)}
+          >
             <span>Dashboard</span>
           </div>
         </div>
@@ -39,10 +44,16 @@ const BackOfficeSidebar = () => {
           >
             {shouldShowProductsMenu && (
               <>
-                <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                <div
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => setSelectedMenu(`productList`)}
+                >
                   <span>Product List</span>
                 </div>
-                <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer ">
+                <div
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer "
+                  onClick={() => setSelectedMenu(`productRegister`)}
+                >
                   <span>Product Register</span>
                 </div>
               </>
