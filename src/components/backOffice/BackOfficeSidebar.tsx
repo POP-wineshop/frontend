@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
 
-const BackOfficeSidebar = () => {
-  const [shouldShowProductsMenu, setShouldShowProductsMenu] =
-    useState<boolean>(false);
-  const [shouldShowCustomersMenu, setShouldShowCustomersMenu] =
-    useState<boolean>(false);
-  const [shouldShowOrdersMenu, setShouldShowOrdersMenu] =
-    useState<boolean>(false);
+interface Props {
+  setSelectedMenu: (value: string) => void;
+}
 
-  const [selectedMenu, setSelectedMenu] = useState<string>('');
+const BackOfficeSidebar = ({ setSelectedMenu }: Props) => {
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+
+  const toggleMenu = (menuName: string) => {
+    setOpenMenu((prev) => (prev === menuName ? null : menuName));
+  };
 
   return (
     <>
       <div className="sidebar-container flex flex-col ">
+        {/* Dashboard */}
         <div className="dashboard-container ">
           <div
             className="dashboard-title border px-8 py-2"
@@ -21,105 +23,72 @@ const BackOfficeSidebar = () => {
             <span>Dashboard</span>
           </div>
         </div>
+
+        {/* Products */}
         <div className="products-container relative">
           <div
-            className="products-title border px-8 py-2"
-            onMouseEnter={() => {
-              setShouldShowProductsMenu(true);
-            }}
-            onMouseLeave={() => {
-              setShouldShowProductsMenu(false);
-            }}
+            className="products-title border px-8 py-2 cursor-pointer"
+            onClick={() => toggleMenu('products')}
           >
             <span>Products</span>
           </div>
-          <div
-            className="absolute left-full top-0 min-w-max bg-white shadow rounded text-sm z-10"
-            onMouseEnter={() => {
-              setShouldShowProductsMenu(true);
-            }}
-            onMouseLeave={() => {
-              setShouldShowProductsMenu(false);
-            }}
-          >
-            {shouldShowProductsMenu && (
-              <>
-                <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => setSelectedMenu(`productList`)}
-                >
-                  <span>Product List</span>
-                </div>
-                <div
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer "
-                  onClick={() => setSelectedMenu(`productRegister`)}
-                >
-                  <span>Product Register</span>
-                </div>
-              </>
-            )}
-          </div>
+          {openMenu === 'products' && (
+            <div className="flex flex-col pl-6 text-sm">
+              <div
+                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                onClick={() => setSelectedMenu('productList')}
+              >
+                Product List
+              </div>
+              <div
+                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                onClick={() => setSelectedMenu('productRegister')}
+              >
+                <span>Product Register</span>
+              </div>
+            </div>
+          )}
         </div>
-        <div className="customers-container relative">
-          <div
-            className="customers-title border px-8 py-2"
-            onMouseEnter={() => {
-              setShouldShowCustomersMenu(true);
-            }}
-            onMouseLeave={() => {
-              setShouldShowCustomersMenu(false);
-            }}
-          >
-            <span>Customers</span>
-          </div>
-          <div
-            className="absolute left-full top-0 min-w-max bg-white shadow rounded text-sm z-10"
-            onMouseEnter={() => {
-              setShouldShowCustomersMenu(true);
-            }}
-            onMouseLeave={() => {
-              setShouldShowCustomersMenu(false);
-            }}
-          >
-            {shouldShowCustomersMenu && (
-              <>
-                <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <span>User List</span>
-                </div>
-              </>
-            )}
-          </div>
+
+        {/* Customers */}
+      </div>
+      <div className="customers-container relative">
+        <div
+          className="customers-title border px-8 py-2"
+          onClick={() => toggleMenu('customers')}
+        >
+          <span>Customers</span>
         </div>
-        <div className="orders-container relative">
-          <div
-            className="orders-title border px-8 py-2"
-            onMouseEnter={() => {
-              setShouldShowOrdersMenu(true);
-            }}
-            onMouseLeave={() => {
-              setShouldShowOrdersMenu(false);
-            }}
-          >
-            <span>Orders</span>
+        {openMenu === 'customers' && (
+          <div className="flex flex-col pl-6 text-sm">
+            <div
+              className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+              onClick={() => setSelectedMenu('userList')}
+            >
+              <span>User List</span>
+            </div>
           </div>
-          <div
-            className="absolute left-full top-0 min-w-max bg-white shadow rounded text-sm z-10"
-            onMouseEnter={() => {
-              setShouldShowOrdersMenu(true);
-            }}
-            onMouseLeave={() => {
-              setShouldShowOrdersMenu(false);
-            }}
-          >
-            {shouldShowOrdersMenu && (
-              <>
-                <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <span>Order List</span>
-                </div>
-              </>
-            )}
-          </div>
+        )}
+      </div>
+
+      {/* Orders */}
+      <div>
+        <div
+          className="border px-8 py-2 cursor-pointer"
+          onClick={() => toggleMenu('orders')}
+        >
+          Orders
         </div>
+        {openMenu === 'orders' && (
+          <div className="flex flex-col pl-6 text-sm">
+            <div
+              className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+              onClick={() => setSelectedMenu('orderList')}
+            >
+              Order List
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
