@@ -10,9 +10,10 @@ const OrderPanel = () => {
 
   return (
     <>
-      <div className="orderPanel-container">
+      <div className="orderPanel-container flex">
         <OrderTable />
-        {selectedOrderItem && <OrderDetail />}
+        {/* {selectedOrderItem && <OrderDetail />} */}
+        <OrderDetail />
       </div>
     </>
   );
