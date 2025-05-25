@@ -1,28 +1,11 @@
+import { useState } from 'react';
 import OrderItem from './OrderItem';
-
-const orders = [
-  {
-    orderNumber: '#20250524-001',
-    status: '결제 완료',
-    date: '2025.05.24 13:25',
-    totalPrice: '57,000원',
-  },
-  {
-    orderNumber: '#20250524-001',
-    status: '결제 완료',
-    date: '2025.05.24 13:25',
-    totalPrice: '57,000원',
-  },
-  {
-    orderNumber: '#20250524-001',
-    status: '결제 완료',
-    date: '2025.05.24 13:25',
-    totalPrice: '57,000원',
-  },
-  // ...다른 주문
-];
+import sampleOrderList from '@/constants/backOffice/order/sampleOrderList';
 
 const OrderTable = () => {
+  const [orderlist, setOrderList] =
+    useState<Record<string, any>[]>(sampleOrderList);
+
   return (
     <>
       <table className="w-full border text-sm">
@@ -35,8 +18,14 @@ const OrderTable = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
-            <OrderItem key={order.orderNumber} {...order} />
+          {orderlist.map((order) => (
+            <OrderItem
+              key={order.orderNumber}
+              orderNumber={order.orderNumber}
+              status={order.orderStatus}
+              date={order.orderDate}
+              totalPrice={order.totalPrice}
+            />
           ))}
         </tbody>
       </table>
