@@ -8,8 +8,6 @@ type UserItemProps = {
 };
 
 const UserItem = ({ userId, password, name }: UserItemProps) => {
-  const handleViewOrderInfo = () => {};
-
   return (
     <>
       <tr className="group border-b hover:bg-gray-100 cursor-pointer">

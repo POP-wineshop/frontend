@@ -1,25 +1,23 @@
-import UserDetail from './UserDetail';
+import { sampleUserList } from '@/constants/backOffice/user/sampleUserList';
 import UserItem from './UserItem';
-
-const users = [
-  {
-    userId: 'testUser01',
-    password: 'qwerty1234!!',
-    name: '김예시',
-  },
-  {
-    userId: 'testUser01',
-    password: 'qwerty1234!!',
-    name: '김예시',
-  },
-  {
-    userId: 'testUser01',
-    password: 'qwerty1234!!',
-    name: '김예시',
-  },
-];
+import { User } from '@/types/backOffice/user/user';
+import { useState } from 'react';
 
 const UserTable = () => {
+  const [userList, setUserList] = useState<User[]>(sampleUserList);
+  const [selectedItem, setSelectedItem] = useState();
+
+  // user 조회 API로 수정 예정
+  // useEffect(() => {
+  //   fetch(`http://localhost:8080/api/wines`)
+  //     .then((response) => response.json())
+  //     .then((jsonResponse) => {
+  //       console.log(`GET 요청 (api/wines) 응답: `, jsonResponse.data);
+  //       setUserList(jsonResponse.data);
+  //     })
+  //     .catch((error) => console.error(`/api/wines 실행 오류 발생: `, error));
+  // }, []);
+
   return (
     <>
       <table className="w-full table-fixed border text-sm">
@@ -31,7 +29,7 @@ const UserTable = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {userList.map((user) => (
             <UserItem key={user.userId} {...user} />
           ))}
         </tbody>
