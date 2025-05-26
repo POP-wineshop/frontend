@@ -20,7 +20,7 @@ const UserTable = () => {
 
   return (
     <>
-      <table className="w-full table-fixed border text-sm">
+      <table className="border text-sm">
         <thead className="bg-gray-100">
           <tr>
             <th className="py-2 px-4">아이디</th>
