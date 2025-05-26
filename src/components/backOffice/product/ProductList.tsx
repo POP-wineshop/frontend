@@ -25,7 +25,7 @@ const ProductList = () => {
 
   return (
     <>
-      <div className="productItems-container flex flex-col">
+      <div className="productItems-container flex flex-col gap-4">
         {productList &&
           productList.map((product: Product) => (
             <ProductItem product={product} />

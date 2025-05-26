@@ -11,7 +11,8 @@ const ProductListPanel = () => {
     <>
       <div className="productListPanel-container flex">
         <ProductList />
-        {selectedProductItem && <ProductDetail />}
+        {/* {selectedProductItem && <ProductDetail />} */}
+        <ProductDetail />
       </div>
     </>
   );
