@@ -22,8 +22,8 @@ const OrderTable = () => {
             <OrderItem
               key={order.orderNumber}
               orderNumber={order.orderNumber}
-              status={order.orderStatus}
-              date={order.orderDate}
+              status={order.status}
+              date={order.date}
               totalPrice={order.totalPrice}
             />
           ))}

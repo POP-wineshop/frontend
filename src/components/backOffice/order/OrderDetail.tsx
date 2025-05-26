@@ -12,25 +12,26 @@ const OrderDetail = () => {
         <table className="w-full border border-collapse text-sm">
           <tbody>
             {/* 주문 식별 정보 */}
-            <tr className="bg-gray-100">
-              <th className="text-left p-2">주문번호</th>
+            <tr>
+              <th className="text-left p-2 bg-gray-100">주문 번호</th>
               <td className="p-2" colSpan={2}>
                 {order.orderNumber}
               </td>
-              <th className="text-left p-2">주문일시</th>
+              <th className="text-left p-2 bg-gray-100">주문 일시</th>
               <td className="p-2" colSpan={2}>
                 {order.orderDate}
               </td>
             </tr>
 
-            {/* 주문 상품 (1개만) */}
+            {/* 주문 상품 */}
             <tr className="bg-gray-50">
               <th className="text-left p-2" colSpan={6}>
                 주문 상품
               </th>
             </tr>
             <tr>
-              <td className="p-2" colSpan={4}>
+              <th className="text-left p-2">상품명</th>
+              <td className="p-2" colSpan={5}>
                 {order.items[0].nameKor}
               </td>
             </tr>
@@ -54,15 +55,20 @@ const OrderDetail = () => {
               </th>
             </tr>
             <tr>
+              <th className="text-left p-2">이름</th>
               <td className="p-2">{order.customer.name}</td>
-              <td className="p-2">{order.customer.zipCode}</td>
-              <td className="p-2" colSpan={4}>
-                {order.customer.address}
+              <th className="text-left p-2">주소</th>
+              <td className="p-2" colSpan={2}>
+                [{order.customer.zipCode}] {order.customer.address}
               </td>
             </tr>
             <tr>
-              <td className="p-2" colSpan={6}>
-                {order.customer.phone} / 배송 메시지:{' '}
+              <th className="text-left p-2">연락처</th>
+              <td className="p-2" colSpan={2}>
+                {order.customer.phone}
+              </td>
+              <th className="text-left p-2">배송 메시지</th>
+              <td className="p-2" colSpan={2}>
                 {order.customer.message || '없음'}
               </td>
             </tr>
@@ -74,27 +80,28 @@ const OrderDetail = () => {
               </th>
             </tr>
             <tr>
-              <td className="p-2" colSpan={6}>
-                상품금액: {order.payment.productTotal.toLocaleString()}원
-                <br />
-                할인: {order.payment.discount.toLocaleString()}원
-                <br />
-                배송비: {order.payment.deliveryFee.toLocaleString()}원
-                <br />
-                최종결제: {order.payment.totalPayment.toLocaleString()}원
+              <th className="text-left p-2">상품 금액</th>
+              <td className="p-2">
+                {order.payment.productTotal.toLocaleString()}원
+              </td>
+              <th className="text-left p-2">할인</th>
+              <td className="p-2">
+                {order.payment.discount.toLocaleString()}원
+              </td>
+              <th className="text-left p-2">배송비</th>
+              <td className="p-2">
+                {order.payment.deliveryFee.toLocaleString()}원
               </td>
             </tr>
             <tr>
-              <th className="p-2" colSpan={1}>
-                결제 수단
-              </th>
-              <td className="p-2" colSpan={2}>
-                {order.payment.method}
+              <th className="text-left p-2">최종 결제</th>
+              <td className="p-2 font-semibold">
+                {order.payment.totalPayment.toLocaleString()}원
               </td>
-              <th className="p-2" colSpan={1}>
-                결제 상태
-              </th>
-              <td className="p-2 font-semibold" colSpan={2}>
+              <th className="text-left p-2">결제 수단</th>
+              <td className="p-2">{order.payment.method}</td>
+              <th className="text-left p-2">결제 상태</th>
+              <td className="p-2 font-semibold">
                 {order.payment.status === 'paid'
                   ? '결제 완료'
                   : order.payment.status === 'cancelRequested'
@@ -103,11 +110,12 @@ const OrderDetail = () => {
               </td>
             </tr>
 
-            {/* 취소 사유 (조건부 렌더링) */}
+            {/* 취소 사유 (조건부) */}
             {order.payment.status !== 'paid' && (
               <tr>
-                <td className="p-2 text-red-600" colSpan={4}>
-                  취소 사유: {order.payment.cancelReason}
+                <th className="text-left p-2 text-red-600">취소 사유</th>
+                <td className="p-2 text-red-600" colSpan={5}>
+                  {order.payment.cancelReason}
                 </td>
               </tr>
             )}
