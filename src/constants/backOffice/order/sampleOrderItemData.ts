@@ -44,7 +44,7 @@ const sampleOrderItemData = {
     deliveryFee: 0,
     totalPayment: 221000,
     method: '신용카드',
-    status: 'cancelRequested', // 'paid' | 'cancelRequested' | 'cancelled'
+    status: 'cancelRequested', // 'pending' | 'paid' | 'cancelRequested' | 'canceled'
     cancelReason: '고객 단순 변심',
   },
 };

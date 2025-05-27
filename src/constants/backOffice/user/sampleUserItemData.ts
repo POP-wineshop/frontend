@@ -15,7 +15,21 @@ const sampleUserItemData = {
   orders: [
     {
       orderNumber: '#20250524-001',
-      totalPrice: 144000,
+      orderDate: '2025.05.25 13:25',
+      totalPayment: 144000,
+      status: 'cancelRequested',
+    },
+    {
+      orderNumber: '#20250524-001',
+      orderDate: '2025.05.24 13:25',
+      totalPayment: 144000,
+      status: 'canceled',
+    },
+    {
+      orderNumber: '#20250524-001',
+      orderDate: '2025.05.23 13:25',
+      totalPayment: 144000,
+      status: 'paid',
     },
   ],
 };
