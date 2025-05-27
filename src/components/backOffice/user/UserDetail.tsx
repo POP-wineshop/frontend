@@ -1,109 +1,62 @@
-import sampleProductItemData from '@/constants/backOffice/product/sampleProductItemData';
+import sampleUserItemData from '@/constants/backOffice/user/sampleUserItemData';
 import { useState } from 'react';
 
 const UserDetail = () => {
-  const [product, setProduct] = useState<Record<string, any>>(
-    sampleProductItemData
-  );
+  const [user, setUser] = useState<Record<string, any>>(sampleUserItemData);
 
   return (
-    <div className="productDetail-container p-6">
+    <div className="userDetail-container p-6 flex flex-col gap-4">
+      {/* 회원 정보 */}
       <table className="w-full border border-collapse text-sm">
         <tbody>
-          <tr>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              한글명
+          <tr className="bg-gray-50 font-semibold">
+            <th className="p-2" colSpan={2}>
+              회원 정보
             </th>
-            <td className="p-2" colSpan={6}>
-              {product.wineName.korean}
-            </td>
           </tr>
           <tr>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              영문명
-            </th>
-            <td className="p-2" colSpan={6}>
-              {product.wineName.english}
-            </td>
+            <th className="p-2 bg-gray-100">아이디</th>
+            <td className="text-center p-2">{user.userId}</td>
           </tr>
           <tr>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              요약 설명
-            </th>
-            <td className="p-2" colSpan={6}>
-              {product.description}
-            </td>
+            <th className="p-2 bg-gray-100">패스워드</th>
+            <td className="text-center p-2">{user.password}</td>
           </tr>
+          <tr>
+            <th className="p-2 bg-gray-100">이름</th>
+            <td className="text-center p-2">{user.name}</td>
+          </tr>
+        </tbody>
+      </table>
 
-          <tr>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              국가 및 지역
+      {/* 주문 내역 */}
+      <table className="w-full border border-collapse text-sm">
+        <tbody>
+          <tr className="bg-gray-50 font-semibold">
+            <th className="p-2" colSpan={4}>
+              주문 내역
             </th>
-            <td className="p-2" colSpan={6}>
-              {product.country} &gt; {product.region}
-            </td>
           </tr>
           <tr>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              와이너리
-            </th>
-            <td className="p-2" colSpan={6}>
-              {product.winery}
-            </td>
+            <th className="p-2 bg-gray-100">주문 번호</th>
+            <th className="p-2 bg-gray-100">주문 금액</th>
+            <th className="p-2 bg-gray-100">주문 일시</th>
+            <th className="p-2 bg-gray-100">주문 상태</th>
           </tr>
-          <tr>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              품종
-            </th>
-            <td className="p-2" colSpan={6}>
-              {product.grapeVariety}
-            </td>
-          </tr>
-
-          <tr>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              당도
-            </th>
-            <td className="p-2" colSpan={2}>
-              {product.tasteProfile.sweetness}
-            </td>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              산도
-            </th>
-            <td className="p-2" colSpan={2}>
-              {product.tasteProfile.acidity}
-            </td>
-          </tr>
-
-          <tr>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              바디
-            </th>
-            <td className="p-2" colSpan={2}>
-              {product.tasteProfile.body}
-            </td>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              도수
-            </th>
-            <td className="p-2" colSpan={2}>
-              {product.alcoholContent}%
-            </td>
-          </tr>
-
-          <tr>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              가격
-            </th>
-            <td className="p-2" colSpan={2}>
-              ₩{product.price.value.toLocaleString()}
-            </td>
-            <th className="text-left p-2 bg-gray-100" colSpan={2}>
-              재고
-            </th>
-            <td className="p-2" colSpan={2}>
-              {product.stock}
-            </td>
-          </tr>
+          {user.orders?.length > 0 ? (
+            <tr className="border-b">
+              <td className="text-center p-2">{user.orders[0].orderNumber}</td>
+              <td className="text-center p-2">{user.orders[0].totalPayment}</td>
+              <td className="text-center p-2">{user.orders[0].orderDate}</td>
+              <td className="text-center p-2">{user.orders[0].status}</td>
+            </tr>
+          ) : (
+            <tr className="border-t border-b">
+              <td className="p-2" colSpan={4}>
+                주문을 찾을 수 없습니다
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
