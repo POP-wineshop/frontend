@@ -34,8 +34,13 @@ function App() {
         </div>
       ) : (
         <div className="main-layout">
-          {shouldShowHeader ? <Header /> : null}
+          {/* 헤더 */}
+          <Header />
+
+          {/* 와인 검색 필터 */}
           {shouldShowWineFilter ? <WineFilter /> : null}
+
+          {/* 메인 컨텐츠 */}
           <main>
             <Routes>
               <Route path="/list" element={<WineListPage />} />

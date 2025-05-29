@@ -49,9 +49,19 @@ const WineApiTestPage = () => {
       endPoint.includes('/category')
     ) {
       url += `?keyword=${encodeURIComponent(queryInput.trim())}`;
-    } else {
+      console.log(url);
+    } else if (
+      needsQueryInput &&
+      queryInput.trim() &&
+      endPoint.includes('/category')
+    ) {
       url += `?quantity=${encodeURIComponent(queryInput.trim())}`;
+      console.log(url);
+    } else if (!needsQueryInput && url.includes('?')) {
+      url = url.split('?')[0]; // '?' 기준 앞부분만 남김
+      console.log(url);
     }
+
     let options: RequestInit = { method };
 
     if (needsJsonInput) {
