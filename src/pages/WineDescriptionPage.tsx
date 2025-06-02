@@ -30,7 +30,6 @@ const WineDescriptionPage = () => {
   const location = useLocation();
 
   const [wineData, setWineData] = useState<Wine>();
-
   const [isModalOn, setIsModalOn] = useState<boolean>(false);
 
   useEffect(() => {
@@ -48,12 +47,14 @@ const WineDescriptionPage = () => {
 
   return (
     <>
-      <WineFilter />
       <div className="wine-description min-w-[900px]">
-        <WineDescriptionTop />
-        <WineDescriptionBottom />
+        {wineData && (
+          <>
+            <WineDescriptionTop wineData={wineData} />
+            <WineDescriptionBottom wineData={wineData} />
+          </>
+        )}
       </div>
-
       {/* 개별 주문 시 MODAL */}
       {isModalOn ? <OrderModal /> : ''}
     </>
