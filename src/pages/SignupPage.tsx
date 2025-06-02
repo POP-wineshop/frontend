@@ -20,58 +20,96 @@ const SignupPage = () => {
       }),
     })
       .then((res) => res.json())
-      .then((jsonResponse) => console.log(jsonResponse))
+      .then((jsonResponse) => {
+        console.log(jsonResponse);
+        alert('회원가입에 성공했습니다');
+        navigate('/login');
+      })
       .catch((error) => alert('회원가입에 실패했습니다'));
   };
 
   return (
     <>
-      <div className="m-auto">
+      <div className="flex justify-center items-center min-h-screen">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSignup();
           }}
-          className="flex flex-col justify-center w-1/2 rounded-xl bg-gray-200"
-          action=""
+          className="flex flex-col gap-4 w-full max-w-md p-8 bg-white rounded-xl shadow-md"
         >
+          <h2 className="text-2xl font-bold text-center mb-4">회원가입</h2>
+
           <div>
-            <label htmlFor="userName">아이디</label>
+            <label
+              htmlFor="userName"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
+              아이디
+            </label>
             <input
               id="userName"
               type="text"
               onChange={(e) => setUserName(e.target.value)}
               placeholder="아이디를 입력해주세요"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
             />
           </div>
+
           <div>
-            <label htmlFor="password">비밀번호</label>
+            <label
+              htmlFor="password"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
+              비밀번호
+            </label>
             <input
               id="password"
               type="password"
               onChange={(e) => setPassword(e.target.value)}
               placeholder="비밀번호를 입력해주세요"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
             />
           </div>
+
           <div>
-            <label htmlFor="pwForConfirming">비밀번호 확인</label>
+            <label
+              htmlFor="pwForConfirming"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
+              비밀번호 확인
+            </label>
             <input
               id="pwForConfirming"
               type="password"
               onChange={(e) => setPwForConfirming(e.target.value)}
               placeholder="비밀번호를 다시 입력해주세요"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
             />
           </div>
+
           <div>
-            <label htmlFor="name">사용자 이름</label>
+            <label
+              htmlFor="name"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
+              사용자 이름
+            </label>
             <input
               id="name"
               type="text"
               onChange={(e) => setName(e.target.value)}
               placeholder="이름을 입력해주세요"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-500"
             />
           </div>
-          <button type="submit">회원 가입</button>
+
+          <button
+            type="submit"
+            className="mt-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition"
+          >
+            회원 가입
+          </button>
         </form>
       </div>
     </>
