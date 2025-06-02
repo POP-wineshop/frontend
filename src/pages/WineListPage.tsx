@@ -1,4 +1,3 @@
-import WineFilter from '../components/common/WineFilter';
 import WineItem from '../components/wineList/WineItem';
 import ToFirstPage from '@/assets/pagination/WineListPage_Pagination_ToFirstPage.svg';
 import ToPreviousPage from '@/assets/pagination/WineListPage_Pagination_ToPreviousPage.svg';
@@ -68,11 +67,10 @@ const WineListPage = () => {
   return (
     <>
       <div className="flex flex-col items-center ">
-        <WineFilter />
         {wineList.length > 0 ? (
           <div className="grid grid-cols-3 gap-4 w-full px-8">
             {wineList.map((wine) => (
-              <WineItem wineData={wine} />
+              <WineItem key={wine.id} wineData={wine} />
             ))}
           </div>
         ) : (

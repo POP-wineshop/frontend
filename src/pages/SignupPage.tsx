@@ -21,11 +21,14 @@ const SignupPage = () => {
     })
       .then((res) => res.json())
       .then((jsonResponse) => {
-        console.log(jsonResponse);
-        alert('회원가입에 성공했습니다');
+        console.log(`회원가입 성공 : `, jsonResponse);
+        alert(`회원가입 성공!`);
         navigate('/login');
       })
-      .catch((error) => alert('회원가입에 실패했습니다'));
+      .catch((error) => {
+        console.error(`회원가입 실패 : `, error);
+        alert('회원가입에 실패했습니다');
+      });
   };
 
   return (

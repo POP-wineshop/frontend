@@ -33,10 +33,14 @@ const LoginPage = () => {
         localStorage.setItem('User Name', `${userName}`);
         setAccessToken(jsonResponse.data.accessToken);
         setRefreshToken(jsonResponse.data.refreshToken);
-        alert('로그인에 성공했습니다');
+        console.log(`로그인 성공 : `, jsonResponse);
+        alert(`로그인 성공!`);
         navigate('/list');
       })
-      .catch(() => alert('로그인에 실패했습니다'));
+      .catch((error) => {
+        console.error(`로그인 실패 : `, error);
+        alert(`로그인 실패!`);
+      });
   };
 
   return (
