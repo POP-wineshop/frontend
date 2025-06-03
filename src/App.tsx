@@ -12,14 +12,12 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/common/Header';
 import BackOfficePage from './pages/backOffice/BackOfficePage';
 import WineFilter from './components/common/WineFilter';
-import BackOfficeSidebar from './components/backOffice/sidebar/BackOfficeSidebar';
+import SignupPage from './pages/SignupPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   const location = useLocation();
   const shouldShowBackOffice = location.pathname.startsWith(`/backoffice`);
-  const shouldShowHeader =
-    !location.pathname.startsWith(`/apitest`) &&
-    !location.pathname.startsWith(`/post`);
   const shouldShowWineFilter =
     location.pathname.startsWith(`/list`) ||
     location.pathname.startsWith(`/description`);
@@ -43,6 +41,9 @@ function App() {
           {/* 메인 컨텐츠 */}
           <main>
             <Routes>
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/login" element={<LoginPage />} />
+
               <Route path="/list" element={<WineListPage />} />
               <Route
                 path="/description/:id"
@@ -52,6 +53,8 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
 
               <Route path="/post" element={<WinePostPage />} />
+
+              {/* API 호출 테스트 */}
               <Route path="/apitest" element={<WineApiTestPage />} />
             </Routes>
           </main>
