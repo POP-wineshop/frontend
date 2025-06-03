@@ -1,3 +1,7 @@
+import { sampleProductReqList } from '@/constants/backOffice/product/sampleProductReqList';
+import { ProductReq } from '@/types/backOffice/product/productReq';
+import { useEffect } from 'react';
+
 const ProductRegister = () => {
   /**
    * TODO: 필드 반복 렌더링 리팩토링 예정
@@ -21,16 +25,16 @@ const ProductRegister = () => {
     const formData = new FormData(e.currentTarget);
 
     const payload = {
-      imageUrl: formData.get('imageUrl'),
-      korName: formData.get('korName'),
-      engName: formData.get('engName'),
+      imageUrl: String(formData.get('imageUrl')).trim(),
+      korName: String(formData.get('korName')).trim(),
+      engName: String(formData.get('engName')).trim(),
       price: Number(formData.get('price')),
       vintage: Number(formData.get('vintage')),
-      country: formData.get('country'),
-      region: formData.get('region'),
-      grapeVariety: formData.get('grapeVariety'),
-      winery: formData.get('winery'),
-      wineType: formData.get('wineType'),
+      country: String(formData.get('country')).trim(),
+      region: String(formData.get('region')).trim(),
+      grapeVariety: String(formData.get('grapeVariety')).trim(),
+      winery: String(formData.get('winery')).trim(),
+      wineType: String(formData.get('wineType')).trim(),
       alcoholContent: Number(formData.get('alcoholContent')),
       stock: Number(formData.get('stock')),
       tasteProfile: {
@@ -38,9 +42,9 @@ const ProductRegister = () => {
         acidity: Number(formData.get('acidity')),
         body: Number(formData.get('body')),
       },
-      tastingNote: formData.get('tastingNote'),
-      foodPairing: formData.get('foodPairing'),
-      description: formData.get('description'),
+      tastingNote: String(formData.get('tastingNote')).trim(),
+      foodPairing: String(formData.get('foodPairing')).trim(),
+      description: String(formData.get('description')).trim(),
     };
 
     fetch(`http://localhost:8080/api/admin/wines`, {
@@ -53,11 +57,40 @@ const ProductRegister = () => {
       .then((response) => response.json())
       .then((jsonResponse) => {
         console.log(`POST 요청 성공 : `, jsonResponse.data);
+        alert(`상품 등록 성공!`);
       })
       .catch((error) => {
         console.error(`POST 요청 실패 : `, error);
+        alert(`상품 등록 실패 ㅠ : ${error}`);
       });
   };
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      const promises = sampleProductReqList.map((req) =>
+        fetch(`http://localhost:8080/api/admin/wines`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(req),
+        })
+          .then((res) => res.json())
+          .then((jsonRes) => {
+            console.log(`POST 요청 성공 : `, jsonRes.data);
+            // alert(`POST 요청 성공! : ${jsonRes.data}`);
+          })
+          .catch((err) => {
+            console.error(`POST 요청 실패 : `, err);
+            // alert(`POST 요청 실패 ㅠ : ${err}`);
+          })
+      );
+
+      await Promise.all(promises);
+    };
+
+    fetchAll();
+  }, []);
 
   return (
     <>
