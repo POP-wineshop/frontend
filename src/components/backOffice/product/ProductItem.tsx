@@ -1,14 +1,12 @@
-import { Product } from '@/types/backOffice/product/product';
+import { ProductRes } from '@/types/backOffice/product/productRes';
 import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 
 interface ProductItemProps {
-  product: Product;
+  product: ProductRes;
 }
 
 const ProductItem = ({ product }: ProductItemProps) => {
-  const [wineStock, setWineStock] = useState<number>(0);
-
   return (
     <>
       <div className="productItem-container group relative flex items-center justify-between rounded-lg border border-gray-200 bg-white px-8 py-2 shadow-sm hover:shadow-md transition cursor-pointer">
@@ -17,17 +15,17 @@ const ProductItem = ({ product }: ProductItemProps) => {
             <tr className="leading-tight">
               <td
                 className={`px-2 py-1 font-semibold font-semibold truncate w-[400px] ${
-                  product.wineName.korean.length > 30 ? 'text-sm' : 'text-base'
+                  product.korName.length > 30 ? 'text-sm' : 'text-base'
                 } `}
                 colSpan={6}
               >
-                {product.wineName.korean}
+                {product.korName}
               </td>
               <th className="px-2 py-1 text-sm text-gray-500 bg-gray-100">
                 가격
               </th>
               <td className="px-2 py-1 text-xs text-black text-center">
-                ₩{product.price.value.toLocaleString()}
+                ₩{product.price.toLocaleString()}
               </td>
             </tr>
             <tr className="border-t border-b align-middle">
