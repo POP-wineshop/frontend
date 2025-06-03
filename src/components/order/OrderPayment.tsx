@@ -1,6 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const OrderPayment = () => {
+type OrderingWineItem = {
+  wineId: number;
+  wineNameKor: string;
+  winePrice: number;
+  orderedQuantity: number;
+  orderedPrice: number;
+  wineImageUrl: string;
+};
+
+type OrderInfoProps = {
+  orderInfo: {
+    orderId: number;
+    orderStatus: string;
+    orderItems: OrderingWineItem[];
+    totalPrice: number;
+  };
+};
+
+const OrderPayment = ({ orderInfo }: OrderInfoProps) => {
   const [totalProductsPrice, setTotalProductsPrice] = useState<number>(0);
   const [deliveryFee, setDeliveryFee] = useState<number>(0);
   //   const [discount, setDiscount] = useState<number>(0);
@@ -15,9 +33,15 @@ const OrderPayment = () => {
     { key: '최종 결제 금액', value: totalPaymentPrice },
   ];
 
-  function toCurrencyFormat(value: number): string {
-    return value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
-  }
+  // 숫자를 회계단위로 변환
+  // => toLocaleString()으로 해결 가능
+  // function toCurrencyFormat(value: number): string {
+  //   return value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  // }
+
+  useEffect(() => {
+    setTotalProductsPrice(orderInfo.totalPrice);
+  }, [orderInfo.totalPrice]);
 
   return (
     <>
@@ -38,7 +62,7 @@ const OrderPayment = () => {
                     <span className="font-semibold">
                       {!(key === '주문상품' || key === '최종 결제 금액') &&
                         (value > 0 ? '+' : value < 0 ? '-' : '')}{' '}
-                      {toCurrencyFormat(value)}원
+                      {value.toLocaleString()}원
                     </span>
                   </td>
                 </tr>
@@ -48,7 +72,7 @@ const OrderPayment = () => {
         </div>
         <div className="order-payment-submit w-full">
           <button className="bg-[#e8e5eb] p-2 w-full rounded-xl font-bold">
-            <span>{toCurrencyFormat(totalPaymentPrice)}</span>원 결제하기
+            <span>₩{totalPaymentPrice.toLocaleString()}</span>원 결제하기
           </button>
         </div>
       </div>
