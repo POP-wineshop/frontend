@@ -35,7 +35,7 @@ const WineItem = ({ wineData }: WineItemProps) => {
   return (
     <>
       <div
-        className="wine-item w-full flex flex-col items-center bg-white rounded-lg p-4 h-96"
+        className="wine-item w-full flex flex-col items-center bg-white rounded-lg p-4 h-96 cursor-pointer"
         onClick={() => {
           navigate(`/description/${wineData.id}`, {
             state: { id: `${wineData.id}` },
@@ -51,8 +51,8 @@ const WineItem = ({ wineData }: WineItemProps) => {
         </div>
 
         <div className="wine-name w-full text-left mt-4">
-          <p className="font-bold text-xl">와인 한글 이름</p>
-          <p className="text-lg text-gray-500">와인 영어 이름</p>
+          <p className="font-bold text-xl">{wineData.korName}</p>
+          <p className="text-lg text-gray-500">{wineData.engName}</p>
           {/* <p className="font-bold text-2xl">{wineNameKor}</p>
           <p className="text-lg text-gray-500">{wineNameEng}</p> */}
         </div>
@@ -63,7 +63,7 @@ const WineItem = ({ wineData }: WineItemProps) => {
 
         <div className="w-full mt-2 text-right text-base font-bold text-gray-600">
           {/* <p>₩{price}</p> */}
-          <p>₩144,000</p>
+          <p>₩{wineData.price.toLocaleString()}</p>
         </div>
       </div>
     </>
