@@ -1,14 +1,46 @@
 import { Heart, HeartPlus } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DuckhornMerlot from '@/assets/wineItem/Duckhorn_Napa Valley_Merlot.png';
+import { useNavigate } from 'react-router-dom';
 
-export const CartItem = () => {
-  const [wineNameEng, setWineNameEng] = useState<string>('');
+type CartWineItem = {
+  cartItemId: number;
+  wineName: string;
+  quantity: number;
+  totalPrice: number;
+  thumbnail: string;
+};
+
+type CartItemProps = {
+  cartWineItem: CartWineItem;
+};
+
+export const CartItem = ({ cartWineItem }: CartItemProps) => {
+  const navigate = useNavigate();
+
+  // cartItemId가 wineId가 아닌가보다. 데이터 내에 wineId를 같이 보내줘야함
+
+  const [cartItemId, setCartItemId] = useState<number>(0);
+  const [wineNameEng, setWineNameEng] = useState<string>('와인 영어 이름');
   const [wineNameKor, setWineNameKor] = useState<string>('');
-  const [cartItemQuantity, setCartItemQuantity] = useState<number>(1);
-  const [cartItemPrice, setCartItemPrice] = useState<number>(0);
+  const [cartItemQuantity, setCartItemQuantity] = useState<number>(0);
+  // const [itemPrice, setItemPrice] = useState<number>(0);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
   const [deliveryFee, setDeliveryFee] = useState<number>(0);
+
+  const [isSelected, setIsSelected] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!cartWineItem) return;
+
+    setCartItemId(cartWineItem.cartItemId);
+    setWineNameKor(cartWineItem.wineName);
+    setCartItemQuantity(cartWineItem.quantity);
+    setTotalPrice(cartWineItem.totalPrice);
+    // setDeliveryFee(cartWineItem.totalPrice >= 50000 ? 0 : 3000); // 예시: 5만원 이상 무료배송
+    setIsLiked(false); // 초기 좋아요는 false로 세팅 (필요 시 API 호출)
+  }, [cartWineItem]);
 
   const substractQuantity = () => {
     if (cartItemQuantity >= 2) {
@@ -23,15 +55,48 @@ export const CartItem = () => {
     return setCartItemQuantity(cartItemQuantity + 1);
   };
 
-  function toCurrencyFormat(value: number): string {
-    return value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
-  }
+  // 숫자를 회계단위로 변환
+  // => toLocaleString()으로 해결 가능
+  // function toCurrencyFormat(value: number): string {
+  //   return value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  // }
+
+  const instantOrderData = {
+    wineId: cartItemId,
+    quantity: cartItemQuantity,
+  };
+
+  const handleInstantOrder = () => {
+    fetch(`http://localhost:8080/api/orders/instant`, {
+      method: 'POST',
+      headers: {
+        Authorization: `${localStorage.getItem('Access Token')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(instantOrderData),
+    })
+      .then((res) => res.json())
+      .then((jsonRes) => {
+        console.log(`주문 생성 성공 : `, jsonRes.data);
+        alert(`주문 생성 성공!`);
+        navigate(`/order`, { state: { orderId: jsonRes.data.orderId } });
+      })
+      .catch((error) => {
+        console.error(`주문 생성 실패 : `, error);
+        alert(`주문 생성 실패 ㅠ : ${error}`);
+      });
+  };
+
+  // 장바구니 아이템 별 체크박스 선택 여부 표시
+  const handleCheckboxToggle = () => {
+    setIsSelected(!isSelected);
+  };
 
   return (
     <>
       <hr />
       <div className="cart-item flex justify-center items-center w-full h-full">
-        <input type="checkbox" />
+        <input onClick={handleCheckboxToggle} type="checkbox" />
         <div className="w-[180px] h-60 border m-3 flex-shrink-0">
           <img
             className="cart-item-img object-contain w-full h-full"
@@ -45,10 +110,10 @@ export const CartItem = () => {
               {/* <p className="cart-item-name-eng">{wineNameEng}</p>
               <p className="cart-item-name-kor">{wineNameKor}</p> */}
               <span className="cart-item-name-eng text-lg font-base">
-                Duckhorn Napa Valley Merlot
+                {wineNameEng}
               </span>
               <span className="cart-item-name-kor text-xl font-bold">
-                덕혼 나파 밸리 멀롯
+                {wineNameKor}
               </span>
             </div>
             <div className="cart-item-buttons flex items-center gap-4">
@@ -62,7 +127,10 @@ export const CartItem = () => {
                   <Heart className="w-6 h-6 stroke-red-500 fill-red-500" />
                 )}
               </button>
-              <button className="cart-item-button-order bg-[#e8e5eb] px-4 py-2 rounded-xl font-bold">
+              <button
+                onClick={handleInstantOrder}
+                className="cart-item-button-order bg-[#e8e5eb] px-4 py-2 rounded-xl font-bold"
+              >
                 개별 주문하기
               </button>
             </div>
@@ -84,8 +152,8 @@ export const CartItem = () => {
                 개별배송
               </p>
               <span className="cart-item-cost text-right text-2xl font-bold">
-                {/* {toCurrencyFormat(cartItemQuantity * cartItemPrice)}원 */}
-                144,000원
+                {/* ₩{(cartItemQuantity * cartItemPrice).toLocaleString()} */}₩
+                {totalPrice.toLocaleString()}
               </span>
             </div>
           </div>
