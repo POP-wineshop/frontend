@@ -23,9 +23,9 @@ type Wine = {
   engName: string;
 };
 
-type WineDescriptionProps = { wineData: Wine };
+type WineDataProps = { wineData: Wine };
 
-const WineDescriptionTop: React.FC<WineDescriptionProps> = ({ wineData }) => {
+const WineDescriptionTop: React.FC<WineDataProps> = ({ wineData }) => {
   // const [wineNameEng, setWineNameEng] = useState<string>(wineData.engName);
   // const [wineNameKor, setWineNameKor] = useState<string>(wineData.korName);
   const [isLiked, setIsLiked] = useState<boolean>(false);
@@ -50,20 +50,17 @@ const WineDescriptionTop: React.FC<WineDescriptionProps> = ({ wineData }) => {
     return setItemQuantity(itemQuantity + 1);
   };
 
-  const cartOrderData = {
-    ordererName: `${localStorage.getItem('User Name')}`,
-    orderItems: [
-      {
-        wineId: wineData.id,
-        quantity: itemQuantity,
-      },
-    ],
-  };
-
   const instantOrderData = {
     wineId: wineData.id,
     quantity: itemQuantity,
   };
+
+  const cartOrderData = {
+    wineId: wineData.id,
+    quantity: itemQuantity,
+  };
+
+  console.log(`cartOrderData : `, cartOrderData);
 
   const handleInstantOrder = () => {
     fetch(`http://localhost:8080/api/orders/instant`, {
@@ -76,7 +73,14 @@ const WineDescriptionTop: React.FC<WineDescriptionProps> = ({ wineData }) => {
     })
       .then((res) => res.json())
       .then((jsonRes) => {
-        console.log(jsonRes.data);
+        // data가 빈 배열일 때
+        if (Array.isArray(jsonRes.data) && jsonRes.data.length === 0) {
+          console.warn('빈 주문 응답 수신됨');
+          alert('주문 항목이 비어 있음. 다시 시도하세요.');
+          return;
+        }
+
+        console.log(`주문 생성 성공 : `, jsonRes.data);
         alert(`주문 생성 성공!`);
         navigate(`/order`, { state: { orderId: jsonRes.data.orderId } });
       })
@@ -87,7 +91,7 @@ const WineDescriptionTop: React.FC<WineDescriptionProps> = ({ wineData }) => {
   };
 
   const handleAddToCart = () => {
-    fetch(`http://localhost:8080/api/orders/instant`, {
+    fetch(`http://localhost:8080/api/carts`, {
       method: 'POST',
       headers: {
         Authorization: `${localStorage.getItem('Access Token')}`,
@@ -97,10 +101,20 @@ const WineDescriptionTop: React.FC<WineDescriptionProps> = ({ wineData }) => {
     })
       .then((res) => res.json())
       .then((jsonRes) => {
-        console.log(jsonRes);
-        alert('주문이 생성되었습니다');
+        // data가 빈 배열일 때
+        // if (Array.isArray(jsonRes.data) && jsonRes.data.length === 0) {
+        //   console.warn('빈 주문 응답 수신됨');
+        //   alert('주문 항목이 비어 있음. 다시 시도하세요.');
+        //   return;
+        // }
+
+        console.log(`장바구니 추가 성공 : `, jsonRes.data);
+        alert(`장바구니 추가 성공! : ${jsonRes.data}`);
       })
-      .catch((error) => alert(`주문이 생성되었습니다: ${error}`));
+      .catch((err) => {
+        console.error(`장바구니 추가 실패 : `, err);
+        alert(`장바구니 추가 실패 ㅠ : ${err}`);
+      });
   };
 
   const wineDescriptionDetails = [
