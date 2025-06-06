@@ -14,6 +14,7 @@ import BackOfficePage from './pages/backOffice/BackOfficePage';
 import WineFilter from './components/common/WineFilter';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
+import MyPage from './pages/MyPage';
 
 function App() {
   const location = useLocation();
@@ -51,6 +52,8 @@ function App() {
               />
               <Route path="/order" element={<OrderPage />} />
               <Route path="/cart" element={<CartPage />} />
+
+              <Route path="/mypage" element={<MyPage />} />
 
               <Route path="/post" element={<WinePostPage />} />
 
