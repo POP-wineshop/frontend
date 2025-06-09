@@ -1,6 +1,11 @@
 import { useState } from 'react';
 
-const CartPayment = () => {
+type CartPaymentProps = {
+  onOrderSelected: () => void;
+  onOrderAll: () => void;
+};
+
+const CartPayment = ({ onOrderSelected, onOrderAll }: CartPaymentProps) => {
   const [totalProductsPrice, setTotalProductsPrice] = useState<number>(0);
   const [deliveryFee, setDeliveryFee] = useState<number>(0);
   //   const [discount, setDiscount] = useState<number>(0);
@@ -48,11 +53,17 @@ const CartPayment = () => {
           </table>
         </div>
         <div className="cart-payment-submit flex gap-2 w-full">
-          <button className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold">
+          <button
+            className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold"
+            onClick={onOrderSelected}
+          >
             선택 상품 <span>{toCurrencyFormat(totalPaymentPrice)}</span>원
             결제하러 가기
           </button>
-          <button className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold">
+          <button
+            className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold"
+            onClick={onOrderAll}
+          >
             전체 상품 <span>{toCurrencyFormat(totalPaymentPrice)}</span>원
             결제하러 가기
           </button>
