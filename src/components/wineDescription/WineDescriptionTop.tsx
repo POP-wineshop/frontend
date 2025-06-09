@@ -73,16 +73,20 @@ const WineDescriptionTop: React.FC<WineDataProps> = ({ wineData }) => {
     })
       .then((res) => res.json())
       .then((jsonRes) => {
-        // data가 빈 배열일 때
-        if (Array.isArray(jsonRes.data) && jsonRes.data.length === 0) {
+        // data가 객체이면 배열로 변환
+        const dataList = Array.isArray(jsonRes.data)
+          ? jsonRes.data
+          : [jsonRes.data];
+
+        if (dataList.length === 0) {
           console.warn('빈 주문 응답 수신됨');
           alert('주문 항목이 비어 있음. 다시 시도하세요.');
           return;
         }
 
-        console.log(`주문 생성 성공 : `, jsonRes.data);
+        console.log(`주문 생성 성공 : `, dataList);
         alert(`주문 생성 성공!`);
-        navigate(`/order`, { state: { orderId: jsonRes.data.orderId } });
+        navigate(`/order`, { state: { orderId: dataList.orderId } });
       })
       .catch((error) => {
         console.error(`주문 생성 실패 : `, error);
@@ -101,15 +105,19 @@ const WineDescriptionTop: React.FC<WineDataProps> = ({ wineData }) => {
     })
       .then((res) => res.json())
       .then((jsonRes) => {
-        // data가 빈 배열일 때
-        // if (Array.isArray(jsonRes.data) && jsonRes.data.length === 0) {
-        //   console.warn('빈 주문 응답 수신됨');
-        //   alert('주문 항목이 비어 있음. 다시 시도하세요.');
-        //   return;
-        // }
+        // data가 객체이면 배열로 변환
+        const dataList = Array.isArray(jsonRes.data)
+          ? jsonRes.data
+          : [jsonRes.data];
 
-        console.log(`장바구니 추가 성공 : `, jsonRes.data);
-        alert(`장바구니 추가 성공! : ${jsonRes.data}`);
+        if (dataList.length === 0) {
+          console.warn('빈 주문 응답 수신됨');
+          alert('주문 항목이 비어 있음. 다시 시도하세요.');
+          return;
+        }
+
+        console.log(`장바구니 추가 성공 : `, dataList);
+        alert(`장바구니 추가 성공! : ${dataList}`);
       })
       .catch((err) => {
         console.error(`장바구니 추가 실패 : `, err);
