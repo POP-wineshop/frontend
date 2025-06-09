@@ -13,9 +13,15 @@ type CartWineItem = {
 
 type CartItemProps = {
   cartWineItem: CartWineItem;
+  selected: boolean;
+  onSelect: () => void;
 };
 
-export const CartItem = ({ cartWineItem }: CartItemProps) => {
+export const CartItem = ({
+  cartWineItem,
+  selected,
+  onSelect,
+}: CartItemProps) => {
   const navigate = useNavigate();
 
   // cartItemId가 wineId가 아닌가보다. 데이터 내에 wineId를 같이 보내줘야함
@@ -28,7 +34,7 @@ export const CartItem = ({ cartWineItem }: CartItemProps) => {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [deliveryFee, setDeliveryFee] = useState<number>(0);
 
-  const [isSelected, setIsSelected] = useState<boolean>(false);
+  // const [isSelected, setIsSelected] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
@@ -37,7 +43,8 @@ export const CartItem = ({ cartWineItem }: CartItemProps) => {
     setCartItemId(cartWineItem.cartItemId);
     setWineNameKor(cartWineItem.wineName);
     setCartItemQuantity(cartWineItem.quantity);
-    setTotalPrice(cartWineItem.totalPrice);
+    // setTotalPrice(cartWineItem.totalPrice);
+    setTotalPrice(cartWineItem.totalPrice); // 바뀔 걸 생각하면 여기도 개별 가격을 받아왔어야 하네;;;
     // setDeliveryFee(cartWineItem.totalPrice >= 50000 ? 0 : 3000); // 예시: 5만원 이상 무료배송
     setIsLiked(false); // 초기 좋아요는 false로 세팅 (필요 시 API 호출)
   }, [cartWineItem]);
@@ -88,15 +95,15 @@ export const CartItem = ({ cartWineItem }: CartItemProps) => {
   };
 
   // 장바구니 아이템 별 체크박스 선택 여부 표시
-  const handleCheckboxToggle = () => {
-    setIsSelected(!isSelected);
-  };
+  // const handleCheckboxToggle = () => {
+  //   setIsSelected(!isSelected);
+  // };
 
   return (
     <>
       <hr />
       <div className="cart-item flex justify-center items-center w-full h-full">
-        <input onClick={handleCheckboxToggle} type="checkbox" />
+        <input type="checkbox" checked={selected} onChange={onSelect} />
         <div className="w-[180px] h-60 border m-3 flex-shrink-0">
           <img
             className="cart-item-img object-contain w-full h-full"
@@ -140,8 +147,7 @@ export const CartItem = ({ cartWineItem }: CartItemProps) => {
               <button className="border w-6" onClick={substractQuantity}>
                 -
               </button>
-              {/* <span>{cartItemQuantity}</span> */}
-              <span className="w-12 text-center">2</span>
+              <span className="w-12 text-center">{cartItemQuantity}</span>
               <button className="border w-6" onClick={addQuantity}>
                 +
               </button>
