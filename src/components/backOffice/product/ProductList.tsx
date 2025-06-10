@@ -12,8 +12,8 @@ const ProductList = () => {
         console.log(`GET 요청 (api/wines) 응답: `, jsonResponse.data);
         setProductList(jsonResponse.data);
       })
-      .catch((error) =>
-        console.error(`GET 요청 (api/wines) 실행 오류 발생: `, error)
+      .catch((err) =>
+        console.error(`GET 요청 (api/wines) 실행 오류 발생: `, err)
       );
   }, []);
 

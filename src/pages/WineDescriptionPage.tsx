@@ -30,7 +30,7 @@ const WineDescriptionPage = () => {
   const location = useLocation();
 
   const [wineData, setWineData] = useState<Wine>();
-  const [isModalOn, setIsModalOn] = useState<boolean>(false);
+  // const [isModalOn, setIsModalOn] = useState<boolean>(false);
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/wines/${location.state.id}`)
@@ -56,7 +56,7 @@ const WineDescriptionPage = () => {
         )}
       </div>
       {/* 개별 주문 시 MODAL */}
-      {isModalOn ? <OrderModal /> : ''}
+      {/* {isModalOn ? <OrderModal /> : ''} */}
     </>
   );
 };
