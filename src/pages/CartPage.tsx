@@ -2,24 +2,25 @@ import { useEffect, useState } from 'react';
 import CartItem from '../components/cart/CartItem';
 import CartPayment from '../components/cart/CartPayment';
 import { useNavigate } from 'react-router-dom';
+import { addQuantity } from '@/utils/common/util';
 
 type CartWineItem = {
   cartItemId: number;
   wineName: string;
   quantity: number;
   totalPrice: number;
+  wineId: number;
   thumbnail: string;
+  winePrice: number;
 };
-
-type CartItemList = CartWineItem[];
-type SelectedItemList = CartWineItem[];
 
 const CartPage = () => {
   const navigate = useNavigate();
 
-  const [cartItemList, setCartItemList] = useState<CartItemList>([]);
-  const [selectedCartItemList, setSelectedCartItemList] =
-    useState<SelectedItemList>([]);
+  const [cartItemList, setCartItemList] = useState<CartWineItem[]>([]);
+  const [selectedCartItemList, setSelectedCartItemList] = useState<
+    CartWineItem[]
+  >([]);
   const [allCartItemsSelected, setAllCartItemsSelected] =
     useState<boolean>(false);
 
@@ -66,14 +67,14 @@ const CartPage = () => {
 
   // 아이템 개별 선택
   const handleSelectCartItem = (id: number) => {
-    if (selectedCartItemList.some((item) => item.cartItemId === id)) {
+    if (selectedCartItemList.some((item) => item.wineId === id)) {
       const updatedList = selectedCartItemList.filter(
-        (cartItem) => cartItem.cartItemId !== id
+        (cartItem) => cartItem.wineId !== id
       );
       setSelectedCartItemList(updatedList);
     } else {
       const targetItem = cartItemList.find(
-        (cartItem) => cartItem.cartItemId === id || ''
+        (cartItem) => cartItem.wineId === id || ''
       );
 
       if (targetItem) {
@@ -84,11 +85,60 @@ const CartPage = () => {
     }
   };
 
+  // 장바구니 리스트에서 특정 아이템의 수량을 1 증가시키는 함수
+  const handleAddQuantityState = (id: number) => {
+    const newCartItemList = cartItemList.map((item) =>
+      item.wineId === id ? { ...item, quantity: item.quantity + 1 } : item
+    );
+    setCartItemList(newCartItemList);
+
+    const newSelectedCartItemList = selectedCartItemList.map((item) =>
+      item.wineId === id ? { ...item, quantity: item.quantity + 1 } : item
+    );
+    setSelectedCartItemList(newSelectedCartItemList);
+  };
+
+  // 장바구니 리스트에서 특정 아이템의 수량을 1 감소시키는 함수 (1 미만 불가)
+  const handleSubstractQuantityState = (id: number) => {
+    const newCartItemList = cartItemList.map((item) =>
+      item.wineId === id && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
+    );
+    setCartItemList(newCartItemList);
+
+    const newSelectedCartItemList = selectedCartItemList.map((item) =>
+      item.wineId === id && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
+    );
+    setSelectedCartItemList(newSelectedCartItemList);
+  };
+
+  // 장바구니 수량 상태를 서버에 PATCH 요청으로 동기화하는 함수
+  const handlePatchCartQuantities = () => {
+    cartItemList.forEach((item) =>
+      fetch(`http://localhost:8080/api/carts/${item.cartItemId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `${localStorage.getItem('Access Token')}`,
+          'content-type': `application/json`,
+        },
+        body: JSON.stringify({ quantity: item.quantity }),
+      })
+        .then((res) => res.json())
+        .then((jsonRes) =>
+          console.log('장바구니 아이템 수량 변경 성공', jsonRes)
+        )
+        .catch((err) => console.error('장바구니 아이템 수량 변경 실패', err))
+    );
+  };
+
   // 선택된 장바구니 아이템 삭제 => [Refactor 필요] 반복 호출이 아닌 여러 item을 한번에 처리하는 방향으로
   const handleDeleteSelectedCartItems = () => {
     if (selectedCartItemList) {
       selectedCartItemList.forEach((item) => {
-        fetch(`http://localhost:8080/api/carts/${item.cartItemId}`, {
+        fetch(`http://localhost:8080/api/carts/${item.wineId}`, {
           method: 'DELETE',
           headers: {
             Authorization: `${localStorage.getItem('Access Token')}`,
@@ -97,7 +147,7 @@ const CartPage = () => {
         })
           .then((res) => res.json())
           .then(() => {
-            console.log(`장바구니 내 아이템 제거 성공 : `, item.cartItemId);
+            console.log(`장바구니 내 아이템 제거 성공 : `, item.wineId);
             alert(`장바구니 내 아이템 제거 성공!`);
           })
           .catch((error) => {
@@ -123,7 +173,7 @@ const CartPage = () => {
         .then((jsonRes) => {
           console.log(
             `장바구니 내 선택된 아이템 주문 생성 성공 : `,
-            item.cartItemId
+            item.wineId
           );
           alert(`장바구니 내 선택된 아이템 주문 생성 성공!`);
           navigate(`/order`, { state: { orderId: jsonRes.data.orderId } });
@@ -190,19 +240,24 @@ const CartPage = () => {
           {/* 주문 진행 중인 상품 목록의 데이터 형태에 따라 달라짐 */}
           {cartItemList?.map((cartItem) => (
             <CartItem
-              key={cartItem.cartItemId}
+              key={cartItem.wineId}
               cartWineItem={cartItem}
               selected={selectedCartItemList.some(
-                (item) => item.cartItemId === cartItem.cartItemId
+                (item) => item.wineId === cartItem.wineId
               )}
-              onSelect={() => handleSelectCartItem(cartItem.cartItemId)}
+              onSelect={() => handleSelectCartItem(cartItem.wineId)}
+              onAddQuantityState={handleAddQuantityState}
+              onSubstractQuantityState={handleSubstractQuantityState}
             />
           ))}
         </div>
         <div className="cart-payment-container w-full py-8">
           <CartPayment
+            cartItemList={cartItemList}
+            selectedCartItemList={selectedCartItemList}
             onOrderSelected={handleOrderSelectedCartItems}
             onOrderAll={handleOrderAllCartItems}
+            onPatchCartQuantities={handlePatchCartQuantities}
           />
         </div>
       </div>
