@@ -1,28 +1,90 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-type CartPaymentProps = {
-  onOrderSelected: () => void;
-  onOrderAll: () => void;
+type CartWineItem = {
+  cartItemId: number;
+  wineName: string;
+  quantity: number;
+  totalPrice: number;
+  wineId: number;
+  thumbnail: string;
+  winePrice: number;
 };
 
-const CartPayment = ({ onOrderSelected, onOrderAll }: CartPaymentProps) => {
-  const [totalProductsPrice, setTotalProductsPrice] = useState<number>(0);
+type CartPaymentProps = {
+  cartItemList: CartWineItem[];
+  selectedCartItemList: CartWineItem[];
+  onOrderSelected: () => void;
+  onOrderAll: () => void;
+  onPatchCartQuantities: () => void;
+};
+
+type CartPaymentItem = {
+  key: string;
+  value: number;
+};
+
+const CartPayment = ({
+  cartItemList,
+  selectedCartItemList,
+  onOrderSelected,
+  onOrderAll,
+  onPatchCartQuantities,
+}: CartPaymentProps) => {
+  const [selectedProductsPrice, setSelectedProductsPrice] = useState<number>(0);
+  const [allProductsPrice, setAllProductsPrice] = useState<number>(0);
   const [deliveryFee, setDeliveryFee] = useState<number>(0);
   //   const [discount, setDiscount] = useState<number>(0);
   //   const [additionalPayment, setAdditionalPayment] = useState<number>(0);
-  const totalPaymentPrice = totalProductsPrice + deliveryFee;
+  const [selectedPaymentPrice, setSelectedPaymentPrice] = useState<number>(
+    selectedProductsPrice + deliveryFee
+  );
+  const [allPaymentPrice, setAllPaymentPrice] = useState<number>(
+    selectedProductsPrice + deliveryFee
+  );
 
-  // 숫자를 템플릿 문자열 ${...}로 감싸면 string으로 저장됨
-  const cartPaymentList = [
-    { key: '총 상품 금액', value: totalProductsPrice },
-    { key: '배송비', value: deliveryFee },
+  const [cartPaymentList, setCartPaymentList] = useState<CartPaymentItem[]>([
+    { key: '총 상품 금액', value: 0 },
+    { key: '배송비', value: 0 },
     { key: '할인/부가결제', value: 0 },
-    { key: '총 결제 예정 금액', value: totalPaymentPrice },
-  ];
+    { key: '총 결제 예정 금액', value: 0 },
+  ]);
 
-  function toCurrencyFormat(value: number): string {
-    return value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
-  }
+  // function toCurrencyFormat(value: number): string {
+  //   return value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  // }
+
+  useEffect(() => {
+    // let cartItemPrice = 0;
+    // selectedCartItemList.forEach((item: CartWineItem) => {
+    //   cartItemPrice += item.winePrice * item.quantity;
+    // });
+    // setSelectedProductsPrice(cartItemPrice);
+
+    const total = selectedCartItemList.reduce(
+      (acc, item) => acc + item.winePrice * item.quantity,
+      0
+    );
+    setSelectedProductsPrice(total);
+    setSelectedPaymentPrice(total + deliveryFee);
+  }, [selectedCartItemList, deliveryFee]);
+
+  useEffect(() => {
+    const total = cartItemList.reduce(
+      (acc, item) => acc + item.winePrice * item.quantity,
+      0
+    );
+    setAllProductsPrice(total);
+    setAllPaymentPrice(total + deliveryFee);
+  }, [cartItemList, deliveryFee]);
+
+  useEffect(() => {
+    setCartPaymentList([
+      { key: '총 상품 금액', value: selectedProductsPrice },
+      { key: '배송비', value: deliveryFee },
+      { key: '할인/부가결제', value: 0 },
+      { key: '총 결제 예정 금액', value: selectedPaymentPrice },
+    ]);
+  }, [selectedProductsPrice]);
 
   return (
     <>
@@ -44,7 +106,7 @@ const CartPayment = ({ onOrderSelected, onOrderAll }: CartPaymentProps) => {
                       {!(
                         key === '총 상품 금액' || key === '총 결제 예정 금액'
                       ) && (value > 0 ? '+' : value < 0 ? '-' : '')}{' '}
-                      {toCurrencyFormat(value)}원
+                      {value.toLocaleString()}원
                     </span>
                   </td>
                 </tr>
@@ -55,17 +117,23 @@ const CartPayment = ({ onOrderSelected, onOrderAll }: CartPaymentProps) => {
         <div className="cart-payment-submit flex gap-2 w-full">
           <button
             className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold"
-            onClick={onOrderSelected}
+            onClick={() => {
+              onOrderSelected();
+              onPatchCartQuantities();
+            }}
           >
-            선택 상품 <span>{toCurrencyFormat(totalPaymentPrice)}</span>원
+            선택 상품 <span>{selectedPaymentPrice.toLocaleString()}</span>원
             결제하러 가기
           </button>
           <button
             className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold"
-            onClick={onOrderAll}
+            onClick={() => {
+              onOrderAll();
+              onPatchCartQuantities();
+            }}
           >
-            전체 상품 <span>{toCurrencyFormat(totalPaymentPrice)}</span>원
-            결제하러 가기
+            전체 상품 <span>{allPaymentPrice.toLocaleString()}</span>원 결제하러
+            가기
           </button>
         </div>
       </div>
