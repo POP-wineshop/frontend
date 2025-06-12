@@ -46,7 +46,6 @@ const CartPage = () => {
 
         setCartItemList(dataList);
         console.log(`장바구니 조회 성공 : `, dataList);
-        alert(`장바구니 조회 성공! : ${dataList}`);
       })
       .catch((err) => {
         console.error(`장바구니 조회 실패 : `, err);
@@ -116,8 +115,8 @@ const CartPage = () => {
   };
 
   // 장바구니 수량 상태를 서버에 PATCH 요청으로 동기화하는 함수
-  const handlePatchCartQuantities = () => {
-    cartItemList.forEach((item) =>
+  const handlePatchCartQuantities = async () => {
+    const patchRequests = cartItemList.map((item) =>
       fetch(`http://localhost:8080/api/carts/${item.cartItemId}`, {
         method: 'PATCH',
         headers: {
@@ -126,12 +125,11 @@ const CartPage = () => {
         },
         body: JSON.stringify({ quantity: item.quantity }),
       })
-        .then((res) => res.json())
-        .then((jsonRes) =>
-          console.log('장바구니 아이템 수량 변경 성공', jsonRes)
-        )
-        .catch((err) => console.error('장바구니 아이템 수량 변경 실패', err))
     );
+
+    const responses = await Promise.all(patchRequests);
+    console.log('장바구니 아이템 수량 변경 성공');
+    return responses;
   };
 
   // 선택된 장바구니 아이템 삭제 => [Refactor 필요] 반복 호출이 아닌 여러 item을 한번에 처리하는 방향으로

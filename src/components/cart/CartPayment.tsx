@@ -15,7 +15,7 @@ type CartPaymentProps = {
   selectedCartItemList: CartWineItem[];
   onOrderSelected: () => void;
   onOrderAll: () => void;
-  onPatchCartQuantities: () => void;
+  onPatchCartQuantities: () => Promise<Response[]>;
 };
 
 type CartPaymentItem = {
@@ -117,9 +117,9 @@ const CartPayment = ({
         <div className="cart-payment-submit flex gap-2 w-full">
           <button
             className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold"
-            onClick={() => {
+            onClick={async () => {
+              await onPatchCartQuantities();
               onOrderSelected();
-              onPatchCartQuantities();
             }}
           >
             선택 상품 <span>{selectedPaymentPrice.toLocaleString()}</span>원
@@ -127,9 +127,9 @@ const CartPayment = ({
           </button>
           <button
             className="bg-[#e8e5eb] p-2 w-1/2 rounded-xl font-bold"
-            onClick={() => {
+            onClick={async () => {
+              await onPatchCartQuantities();
               onOrderAll();
-              onPatchCartQuantities();
             }}
           >
             전체 상품 <span>{allPaymentPrice.toLocaleString()}</span>원 결제하러
