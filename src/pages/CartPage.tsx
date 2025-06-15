@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import CartItem from '../components/cart/CartItem';
 import CartPayment from '../components/cart/CartPayment';
 import { useNavigate } from 'react-router-dom';
-import { addQuantity } from '@/utils/common/util';
 
 type CartWineItem = {
   cartItemId: number;
