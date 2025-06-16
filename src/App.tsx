@@ -3,7 +3,7 @@ import WineDescriptionPage from './pages/WineDescriptionPage';
 import OrderPage from './pages/OrderPage';
 import CartPage from './pages/CartPage';
 
-import WinePostPage from './pages/WinePostPage';
+// import WinePostPage from './pages/WinePostPage';
 
 import WineApiTestPage from './pages/WineApiTestPage';
 
@@ -15,10 +15,13 @@ import WineFilter from './components/common/WineFilter';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import MyPage from './pages/MyPage';
+import TossPaymentPage from './pages/tossPayments/TossPaymentPage';
 
 function App() {
   const location = useLocation();
   const shouldShowBackOffice = location.pathname.startsWith(`/backoffice`);
+  const shouldShowTossPayments = location.pathname.startsWith(`/tosspayments`);
+
   const shouldShowWineFilter =
     location.pathname.startsWith(`/list`) ||
     location.pathname.startsWith(`/description`);
@@ -31,20 +34,21 @@ function App() {
             <Route path="/backoffice/*" element={<BackOfficePage />} />
           </Routes>
         </div>
+      ) : shouldShowTossPayments ? (
+        <div className="backOffice-layout">
+          <Routes>
+            <Route path="/tosspayments/*" element={<TossPaymentPage />} />
+          </Routes>
+        </div>
       ) : (
         <div className="main-layout">
-          {/* 헤더 */}
           <Header />
-
-          {/* 와인 검색 필터 */}
-          {shouldShowWineFilter ? <WineFilter /> : null}
-
-          {/* 메인 컨텐츠 */}
+          {shouldShowWineFilter && <WineFilter />}
           <main>
             <Routes>
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/login" element={<LoginPage />} />
-
+              <Route path="/mypage" element={<MyPage />} />
               <Route path="/list" element={<WineListPage />} />
               <Route
                 path="/description/:id"
@@ -52,12 +56,8 @@ function App() {
               />
               <Route path="/order" element={<OrderPage />} />
               <Route path="/cart" element={<CartPage />} />
-
-              <Route path="/mypage" element={<MyPage />} />
-
-              <Route path="/post" element={<WinePostPage />} />
-
-              {/* API 호출 테스트 */}
+              {/* <Route path="/checkout" element={<TossPaymentPage />} /> */}
+              {/* <Route path="/post" element={<WinePostPage />} /> */}
               <Route path="/apitest" element={<WineApiTestPage />} />
             </Routes>
           </main>
