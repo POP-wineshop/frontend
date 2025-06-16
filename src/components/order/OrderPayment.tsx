@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 type OrderingWineItem = {
   wineId: number;
@@ -19,6 +20,7 @@ type OrderInfoProps = {
 };
 
 const OrderPayment = ({ orderInfo }: OrderInfoProps) => {
+  const navigate = useNavigate();
   const [totalProductsPrice, setTotalProductsPrice] = useState<number>(0);
   const [deliveryFee, setDeliveryFee] = useState<number>(0);
   //   const [discount, setDiscount] = useState<number>(0);
@@ -71,7 +73,19 @@ const OrderPayment = ({ orderInfo }: OrderInfoProps) => {
           </table>
         </div>
         <div className="order-payment-submit w-full">
-          <button className="bg-[#e8e5eb] p-2 w-full rounded-xl font-bold">
+          <button
+            onClick={() => {
+              navigate('/tosspayments', {
+                // 현재 주문 정보에서 userId를 받아오지 않으므로 하드코딩
+                state: {
+                  orderId: orderInfo.orderId,
+                  userId: 4,
+                  totalPaymentPrice: orderInfo.totalPrice,
+                },
+              });
+            }}
+            className="bg-[#e8e5eb] p-2 w-full rounded-xl font-bold"
+          >
             <span>₩{totalPaymentPrice.toLocaleString()}</span>원 결제하기
           </button>
         </div>
