@@ -80,7 +80,7 @@ const OrderPayment = ({ orderInfo }: OrderInfoProps) => {
                 state: {
                   orderId: orderInfo.orderId,
                   userId: 4,
-                  totalPaymentPrice: orderInfo.totalPrice,
+                  totalPrice: orderInfo.totalPrice,
                 },
               });
             }}
