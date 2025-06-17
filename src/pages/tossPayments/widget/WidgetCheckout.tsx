@@ -20,7 +20,7 @@ export function WidgetCheckout() {
   const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
   const [amount, setAmount] = useState({
     currency: 'KRW',
-    value: location.state.totalPrice,
+    value: 0,
   });
 
   useEffect(() => {
@@ -42,12 +42,16 @@ export function WidgetCheckout() {
       if (widgets == null) {
         return;
       }
+
+      console.log(
+        `WidgetCheckout에서 총 결제 금액 : ${location.state.totalPrice}`
+      );
       /**
        * 위젯의 결제금액을 결제하려는 금액으로 초기화하세요.
        * renderPaymentMethods, renderAgreement, requestPayment 보다 반드시 선행되어야 합니다.
        * @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
        */
-      await widgets.setAmount(amount);
+      await widgets.setAmount({ ...amount, value: location.state.totalPrice });
 
       await Promise.all([
         /**
@@ -95,17 +99,12 @@ export function WidgetCheckout() {
                  */
                 await widgets?.requestPayment({
                   orderId: generateReadableId('order', location.state.orderId),
+                  // orderId: location.state.orderId,
                   orderName: 'testOrder',
                   customerName: '김예시',
                   customerEmail: 'dilkusha27@gmail.com',
-                  successUrl:
-                    window.location.origin +
-                    '/tosspayments/success' +
-                    window.location.search,
-                  failUrl:
-                    window.location.origin +
-                    '/tosspayments/fail' +
-                    window.location.search,
+                  successUrl: window.location.origin + '/tosspayments/success',
+                  failUrl: window.location.origin + '/tosspayments/fail',
                 });
               } catch (error) {
                 console.error(`tossPaymentWideget 결제 실패 : ${error}`);
