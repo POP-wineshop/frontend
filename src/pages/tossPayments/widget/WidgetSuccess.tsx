@@ -14,30 +14,43 @@ export function WidgetSuccess() {
         paymentKey: searchParams.get('paymentKey'),
       };
 
-      const response = await fetch('/api/confirm/widget', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      });
+      console.log(requestData.orderId);
 
-      const json = await response.json();
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/payments/${requestData.orderId}/confirm`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+          }
+        );
 
-      if (!response.ok) {
-        throw { message: json.message, code: json.code };
+        const resText = await response.text();
+        let json;
+        try {
+          json = JSON.parse(resText);
+        } catch (e) {
+          console.error('⚠️ JSON 파싱 실패. 원문:', resText);
+          throw {
+            message: '응답이 비어있거나 JSON 형식이 아님',
+            code: response.status,
+          };
+        }
+
+        if (!response.ok) {
+          throw { message: json.message, code: json.code };
+        }
+
+        setResponseData(json);
+      } catch (error: any) {
+        navigate(`/fail?code=${error.code}&message=${error.message}`);
       }
-
-      return json;
     }
 
-    confirm()
-      .then((data) => {
-        setResponseData(data);
-      })
-      .catch((error) => {
-        navigate(`/fail?code=${error.code}&message=${error.message}`);
-      });
+    confirm();
   }, [searchParams]);
 
   return (
