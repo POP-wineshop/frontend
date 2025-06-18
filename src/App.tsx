@@ -8,7 +8,13 @@ import CartPage from './pages/CartPage';
 import WineApiTestPage from './pages/WineApiTestPage';
 
 import './App.css';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import Header from './components/common/Header';
 import BackOfficePage from './pages/backOffice/BackOfficePage';
 import WineFilter from './components/common/WineFilter';
@@ -46,6 +52,8 @@ function App() {
           {shouldShowWineFilter && <WineFilter />}
           <main>
             <Routes>
+              <Route index element={<Navigate to="login" />} />
+
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/mypage" element={<MyPage />} />
