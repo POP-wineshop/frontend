@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './counterSlice';
-import
+import wineListReducer from './wineList/useWineListStore';
 
 export const store = configureStore({
   reducer: {
