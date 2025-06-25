@@ -8,13 +8,7 @@ import CartPage from './pages/CartPage';
 import WineApiTestPage from './pages/WineApiTestPage';
 
 import './App.css';
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/common/Header';
 import BackOfficePage from './pages/backOffice/BackOfficePage';
 import WineFilter from './components/common/WineFilter';
@@ -41,7 +35,7 @@ function App() {
           </Routes>
         </div>
       ) : shouldShowTossPayments ? (
-        <div className="backOffice-layout">
+        <div className="tossPayments-layout">
           <Routes>
             <Route path="/tosspayments/*" element={<TossPaymentPage />} />
           </Routes>
