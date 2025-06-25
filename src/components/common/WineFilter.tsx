@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const WineFilter = () => {
   const countries = [
-    '생산국',
-    '프랑스',
-    '이탈리아',
-    '스페인',
-    '독일',
-    '미국',
-    '호주',
-    '뉴질랜드',
-    '칠레',
-    '아르헨티나',
+    { key: '생산국', value: '' },
+    { key: '프랑스', value: '프랑스' },
+    { key: '이탈리아', value: '이탈리아' },
+    { key: '스페인', value: '스페인' },
+    { key: '독일', value: '독일' },
+    { key: '미국', value: '미국' },
+    { key: '호주', value: '호주' },
+    { key: '뉴질랜드', value: '뉴질랜드' },
+    { key: '칠레', value: '칠레' },
+    { key: '아르헨티나', value: '아르헨티나' },
   ];
 
   const regions = [
@@ -36,41 +37,71 @@ const WineFilter = () => {
     { key: '디저트', value: 'DESSERT' },
   ];
 
+  const navigate = useNavigate();
+
   const [country, setCountry] = useState<string>('');
   const [region, setRegion] = useState<string>('');
   const [wineType, setWineType] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
 
-  const handleSearchWines = () => {
-    const url = new URL('http://localhost:8080/api/wines/search');
-    const params = new URLSearchParams(url.search);
+  useEffect(() => {
+    const handleNavigateToFilteredList = () => {
+      navigate(`/list`, {
+        state: {
+          country,
+          region,
+          wineType,
+        },
+      });
+    };
 
-    if (country) params.append('country', country);
-    if (region) params.append('region', region);
-    if (wineType) params.append('wineType', wineType);
-    if (keyword) params.append('keyword', keyword);
+    handleNavigateToFilteredList();
+  }, [country, region, wineType]);
 
-    const finalUrl = `${url.origin}${url.pathname}?${params.toString()}`;
-
-    fetch(finalUrl)
-      .then((res) => res.json())
-      .then((jsonRes) => {
-        console.log(jsonRes);
-        alert(`와인 조회 성공! 
-          url : ${finalUrl}
-          국가 / 지역 : ${country} > ${region}
-          종류 : ${wineType}
-          키워드 : ${keyword}`);
-        // 전역 변수로 와인 목록 컴포넌트에 들어갈 와인 데이터 상태 변경
-      })
-      .catch((error) =>
-        alert(`와인 조회 실패 ㅠ
-          국가 / 지역 : ${country} > ${region}
-          종류 : ${wineType}
-          키워드 : ${keyword}
-          에러: ${error}`)
-      );
+  const handleFilterIncludingKeyword = () => {
+    navigate(`/list`, {
+      state: {
+        country,
+        region,
+        wineType,
+        keyword,
+      },
+    });
   };
+
+  // const handleSearchWines = () => {
+  //   const url = new URL('http://localhost:8080/api/wines/search');
+  //   const params = new URLSearchParams(url.search);
+
+  //   if (country) params.append('country', country);
+  //   if (region) params.append('region', region);
+  //   if (wineType) params.append('wineType', wineType);
+  //   if (keyword) params.append('keyword', keyword);
+
+  //   const finalUrl = `${url.origin}${url.pathname}?${params.toString()}`;
+
+  //   fetch(finalUrl)
+  //     .then((res) => res.json())
+  //     .then((jsonRes) => {
+  //       console.log(jsonRes);
+  //       alert(`와인 조회 성공!
+  //         url : ${finalUrl}
+  //         국가 / 지역 : ${country} > ${region}
+  //         종류 : ${wineType}
+  //         키워드 : ${keyword}`);
+  //       // 전역 변수로 와인 목록 컴포넌트에 들어갈 와인 데이터 상태 변경
+  //       navigate(
+  //         `/list?country=${country}&region=${region}&wineType=${wineType}&keyword=${keyword}`
+  //       );
+  //     })
+  //     .catch((error) =>
+  //       alert(`와인 조회 실패 ㅠ
+  //         국가 / 지역 : ${country} > ${region}
+  //         종류 : ${wineType}
+  //         키워드 : ${keyword}
+  //         에러: ${error}`)
+  //     );
+  // };
 
   return (
     <>
@@ -82,7 +113,9 @@ const WineFilter = () => {
               className="border w-32 p-2 rounded"
             >
               {countries.map((country) => (
-                <option key={country}>{country}</option>
+                <option key={country.key} value={country.value}>
+                  {country.key}
+                </option>
               ))}
             </select>
           </div>
@@ -120,7 +153,10 @@ const WineFilter = () => {
               className="border w-64 p-2 rounded"
               onChange={(e) => setKeyword(e.target.value)}
             />
-            <button onClick={handleSearchWines} className="border p-2 rounded">
+            <button
+              onClick={handleFilterIncludingKeyword}
+              className="border p-2 rounded"
+            >
               검색
             </button>
           </div>
