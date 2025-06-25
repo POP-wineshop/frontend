@@ -135,7 +135,7 @@ const CartPage = () => {
   const handleDeleteSelectedCartItems = () => {
     if (selectedCartItemList) {
       selectedCartItemList.forEach((item) => {
-        fetch(`http://localhost:8080/api/carts/${item.wineId}`, {
+        fetch(`http://localhost:8080/api/carts/${item.cartItemId}`, {
           method: 'DELETE',
           headers: {
             Authorization: `${localStorage.getItem('Access Token')}`,
@@ -144,7 +144,7 @@ const CartPage = () => {
         })
           .then((res) => res.json())
           .then(() => {
-            console.log(`장바구니 내 아이템 제거 성공 : `, item.wineId);
+            console.log(`장바구니 내 아이템 제거 성공 : `, item.cartItemId);
             alert(`장바구니 내 아이템 제거 성공!`);
           })
           .catch((error) => {
