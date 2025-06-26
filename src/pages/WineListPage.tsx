@@ -4,7 +4,7 @@ import ToPreviousPage from '@/assets/pagination/WineListPage_Pagination_ToPrevio
 import ToNextPage from '@/assets/pagination/WineListPage_Pagination_ToNextPage.svg';
 import ToLastPage from '@/assets/pagination/WineListPage_Pagination_ToLastPage.svg';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type Wine = {
   id: number;
@@ -30,39 +30,65 @@ const WineListPage = () => {
   // useNavigate() 이용
   const navigate = useNavigate();
 
+  // useLocation() 이용
+  const location = useLocation();
+
   // 페이지네이션 관련 상태
   const [totalItems, setTotalItems] = useState<number | ''>('');
   const [totalPages, setTotalPages] = useState<number | ''>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [finalUrl, setFinalUrl] = useState<string>(
+    `http://localhost:8080/api/wines/search`
+  );
 
   // 데이터 수신 및 저장 관련 상태
   const [wineList, setWineList] = useState<Wine[]>([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/wines`)
-      .then((response) => response.json())
-      .then((jsonResponse) => {
-        console.log(`GET 요청 (api/wines) 응답: `, jsonResponse.data);
-        setWineList(jsonResponse.data);
-      })
-      .catch((error) => console.error(`/api/wines 실행 오류 발생: `, error));
-  }, []);
+    // fetch(`http://localhost:8080/api/wines`)
+    //   .then((response) => response.json())
+    //   .then((jsonResponse) => {
+    //     console.log(`GET 요청 (api/wines) 응답: `, jsonResponse.data);
+    //     setWineList(jsonResponse.data);
+    //   })
+    //   .catch((error) => console.error(`/api/wines 실행 오류 발생: `, error));
 
-  // 전체 데이터 개수 가져오기
+    const handleShowWines = () => {
+      const { country, region, wineType, keyword } = location.state;
+      const url = new URL('http://localhost:8080/api/wines/search');
+      const params = new URLSearchParams(url.search);
 
-  // 전체 페이지 수 계산 (총 데이터 개수 ÷ 한 페이지당 개수 → 올림)
+      if (country) params.append('country', country);
+      if (region) params.append('region', region);
+      if (wineType) params.append('wineType', wineType);
+      if (keyword) params.append('keyword', keyword);
 
-  // 현재 페이지 상태값 초기화 (예: 1페이지부터 시작)
+      // setFinalUrl(`${url.origin}${url.pathname}?${params.toString()}`);
 
-  // 현재 페이지에 맞는 데이터 잘라서 보여주기 (slice 또는 filter)
+      fetch(`${url.origin}${url.pathname}?${params.toString()}`)
+        .then((res) => res.json())
+        .then((jsonRes) => {
+          console.log(`finalUrl : ${finalUrl}`);
+          console.log(`jsonRes.data : ${jsonRes.data}`);
+          // alert(`와인 조회 성공!
+          //   url : ${finalUrl}
+          //   국가 / 지역 : ${country} > ${region}
+          //   종류 : ${wineType}
+          //   키워드 : ${keyword}`);
+          // // 전역 변수로 와인 목록 컴포넌트에 들어갈 와인 데이터 상태 변경
+          setWineList(jsonRes.data);
+        })
+        .catch((error) =>
+          alert(`와인 조회 실패 ㅠ
+            국가 / 지역 : ${country} > ${region}
+            종류 : ${wineType}
+            키워드 : ${keyword}
+            에러: ${error}`)
+        );
+    };
 
-  // 페이지네이션 버튼 범위 계산 (예: 15, 610)
-
-  // 페이지 버튼 클릭 시 → 현재 페이지 상태 업데이트
-
-  // 첫/이전/다음/마지막 버튼 → 현재 페이지에 따라 비활성/활성 처리
-
-  // 현재 페이지에 맞는 데이터 다시 보여주기 (4번과 연결)
+    handleShowWines();
+  }, [location.state]);
 
   return (
     <>
