@@ -60,8 +60,6 @@ const WineDescriptionTop: React.FC<WineDataProps> = ({ wineData }) => {
     quantity: itemQuantity,
   };
 
-  console.log(`cartOrderData : `, cartOrderData);
-
   const handleInstantOrder = () => {
     fetch(`http://localhost:8080/api/orders/instant`, {
       method: 'POST',
@@ -74,19 +72,23 @@ const WineDescriptionTop: React.FC<WineDataProps> = ({ wineData }) => {
       .then((res) => res.json())
       .then((jsonRes) => {
         // data가 객체이면 배열로 변환
-        const dataList = Array.isArray(jsonRes.data)
-          ? jsonRes.data
-          : [jsonRes.data];
+        // const dataList = Array.isArray(jsonRes.data)
+        //   ? jsonRes.data
+        //   : [jsonRes.data];
 
-        if (dataList.length === 0) {
-          console.warn('빈 주문 응답 수신됨');
-          alert('주문 항목이 비어 있음. 다시 시도하세요.');
-          return;
-        }
+        // if (dataList.length === 0) {
+        //   console.warn('빈 주문 응답 수신됨');
+        //   alert('주문 항목이 비어 있음. 다시 시도하세요.');
+        //   return;
+        // }
 
-        console.log(`주문 생성 성공 : `, dataList);
+        // console.log(`주문 생성 성공 : `,  dataList);
+        // alert(`주문 생성 성공!`);
+        // navigate(`/order`, { state: { orderId: dataList.orderId } });
+
+        console.log(`주문 생성 성공 : `, jsonRes.data);
         alert(`주문 생성 성공!`);
-        navigate(`/order`, { state: { orderId: dataList.orderId } });
+        navigate(`/order`, { state: { orderId: jsonRes.data.orderId } });
       })
       .catch((error) => {
         console.error(`주문 생성 실패 : `, error);
