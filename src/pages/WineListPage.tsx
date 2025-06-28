@@ -37,9 +37,9 @@ const WineListPage = () => {
   const [totalItems, setTotalItems] = useState<number | ''>('');
   const [totalPages, setTotalPages] = useState<number | ''>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [finalUrl, setFinalUrl] = useState<string>(
-    `http://localhost:8080/api/wines/search`
-  );
+  // const [finalUrl, setFinalUrl] = useState<string>(
+  //   `http://localhost:8080/api/wines/search`
+  // );
 
   // 데이터 수신 및 저장 관련 상태
   const [wineList, setWineList] = useState<Wine[]>([]);
@@ -54,21 +54,23 @@ const WineListPage = () => {
     //   .catch((error) => console.error(`/api/wines 실행 오류 발생: `, error));
 
     const handleShowWines = () => {
-      const { country, region, wineType, keyword } = location.state;
       const url = new URL('http://localhost:8080/api/wines/search');
       const params = new URLSearchParams(url.search);
+      if (location.state) {
+        const { country, region, wineType, keyword } = location.state;
 
-      if (country) params.append('country', country);
-      if (region) params.append('region', region);
-      if (wineType) params.append('wineType', wineType);
-      if (keyword) params.append('keyword', keyword);
+        if (country) params.append('country', country);
+        if (region) params.append('region', region);
+        if (wineType) params.append('wineType', wineType);
+        if (keyword) params.append('keyword', keyword);
+      }
 
-      // setFinalUrl(`${url.origin}${url.pathname}?${params.toString()}`);
+      const finalUrl = `${url.origin}${url.pathname}?${params.toString()}`;
 
-      fetch(`${url.origin}${url.pathname}?${params.toString()}`)
+      fetch(finalUrl)
         .then((res) => res.json())
         .then((jsonRes) => {
-          console.log(`finalUrl : ${finalUrl}`);
+          console.log(`fetch url : ${finalUrl}`);
           console.log(`jsonRes.data : ${jsonRes.data}`);
           // alert(`와인 조회 성공!
           //   url : ${finalUrl}
@@ -80,9 +82,11 @@ const WineListPage = () => {
         })
         .catch((error) =>
           alert(`와인 조회 실패 ㅠ
-            국가 / 지역 : ${country} > ${region}
-            종류 : ${wineType}
-            키워드 : ${keyword}
+            국가 / 지역 : ${location.state ? location.state.country : null} > ${
+            location.state ? location.state.region : null
+          }
+            종류 : ${location.state ? location.state.wineType : null}
+            키워드 : ${location.state ? location.state.keyword : null}
             에러: ${error}`)
         );
     };
