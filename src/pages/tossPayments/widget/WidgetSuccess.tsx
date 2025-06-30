@@ -10,20 +10,23 @@ export function WidgetSuccess() {
     async function confirm() {
       const requestData = {
         orderId: searchParams.get('orderId'),
+        // orderId: searchParams.get('orderId')?.split('_')[2],
         amount: searchParams.get('amount'),
         paymentKey: searchParams.get('paymentKey'),
       };
 
-      console.log(requestData.orderId);
-      const orderIdForUrlPath = requestData.orderId?.split('_')[1];
+      console.log(requestData);
+      const orderIdInNumber = requestData.orderId?.split('_')[2];
 
       try {
         const response = await fetch(
-          `http://localhost:8080/api/payments/${orderIdForUrlPath}/confirm`,
+          `http://localhost:8080/api/payments/${orderIdInNumber}/confirm`,
+          // `http://localhost:8080/api/payments/${requestData.orderId}/confirm`,
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              Authorization: `${localStorage.getItem('Access Token')}`,
             },
             body: JSON.stringify(requestData),
           }

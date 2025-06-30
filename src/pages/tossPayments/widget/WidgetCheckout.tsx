@@ -9,8 +9,12 @@ import { useLocation } from 'react-router-dom';
 // prefix와 ID를 연결해 사람이 읽을 수 있고 복호화 가능한 문자열 생성
 // 예: "user_42", "order_3001"
 // 추후 백엔드 암호화 로직 도입 전까지 임시 사용
+const today = new Date();
+const dateStr = `${today.getFullYear()}${(today.getMonth() + 1)
+  .toString()
+  .padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
 const generateReadableId = (prefix: 'order' | 'user', id: number) =>
-  `${prefix}_${id}`;
+  `${dateStr}_${prefix}_${id}`;
 
 const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 
