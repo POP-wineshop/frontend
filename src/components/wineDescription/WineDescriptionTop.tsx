@@ -88,7 +88,12 @@ const WineDescriptionTop: React.FC<WineDataProps> = ({ wineData }) => {
 
         console.log(`주문 생성 성공 : `, jsonRes.data);
         alert(`주문 생성 성공!`);
-        navigate(`/order`, { state: { orderId: jsonRes.data.orderId } });
+        navigate(`/order`, {
+          state: {
+            orderId: jsonRes.data.orderId,
+            tossOrderId: jsonRes.data.tossOrderId,
+          },
+        });
       })
       .catch((error) => {
         console.error(`주문 생성 실패 : `, error);

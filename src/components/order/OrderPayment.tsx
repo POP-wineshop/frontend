@@ -13,6 +13,7 @@ type OrderingWineItem = {
 type OrderInfoProps = {
   orderInfo: {
     orderId: number;
+    tossOrderId: string;
     orderStatus: string;
     orderItems: OrderingWineItem[];
     totalPrice: number;
@@ -78,7 +79,7 @@ const OrderPayment = ({ orderInfo }: OrderInfoProps) => {
               navigate('/tosspayments', {
                 // 현재 주문 정보에서 userId를 받아오지 않으므로 하드코딩
                 state: {
-                  orderId: orderInfo.orderId,
+                  tossOrderId: orderInfo.tossOrderId,
                   userId: 4,
                   totalPrice: orderInfo.totalPrice,
                 },

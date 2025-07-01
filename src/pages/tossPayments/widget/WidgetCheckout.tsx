@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 // prefix와 ID를 연결해 사람이 읽을 수 있고 복호화 가능한 문자열 생성
 // 예: "user_42", "order_3001"
 // 추후 백엔드 암호화 로직 도입 전까지 임시 사용
+
 const today = new Date();
 const dateStr = `${today.getFullYear()}${(today.getMonth() + 1)
   .toString()
@@ -102,8 +103,8 @@ export function WidgetCheckout() {
                  * @docs https://docs.tosspayments.com/sdk/v2/js#widgetsrequestpayment
                  */
                 await widgets?.requestPayment({
-                  orderId: generateReadableId('order', location.state.orderId),
-                  // orderId: location.state.orderId,
+                  // orderId: generateReadableId('order', location.state.orderId),
+                  orderId: location.state.tossOrderId,
                   orderName: 'testOrder',
                   customerName: '김예시',
                   customerEmail: 'dilkusha27@gmail.com',

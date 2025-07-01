@@ -16,6 +16,7 @@ type OrderingWineItem = {
 
 interface OrderInfo {
   orderId: number;
+  tossOrderId: string;
   orderStatus: string;
   orderItems: OrderingWineItem[];
   totalPrice: number;
@@ -24,6 +25,7 @@ interface OrderInfo {
 const OrderPage = () => {
   const location = useLocation();
   const orderId = location.state.orderId;
+  const tossOrderId = location.state.tossOrderId;
 
   const [orderInfo, setOrderInfo] = useState<OrderInfo | null>();
 

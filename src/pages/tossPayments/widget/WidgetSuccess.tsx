@@ -16,11 +16,11 @@ export function WidgetSuccess() {
       };
 
       console.log(requestData);
-      const orderIdInNumber = requestData.orderId?.split('_')[2];
+      // const orderIdInNumber = requestData.orderId?.split('_')[2];
 
       try {
         const response = await fetch(
-          `http://localhost:8080/api/payments/${orderIdInNumber}/confirm`,
+          `http://localhost:8080/api/payments/confirm`,
           // `http://localhost:8080/api/payments/${requestData.orderId}/confirm`,
           {
             method: 'POST',

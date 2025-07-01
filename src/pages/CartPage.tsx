@@ -173,7 +173,13 @@ const CartPage = () => {
             item.wineId
           );
           alert(`장바구니 내 선택된 아이템 주문 생성 성공!`);
-          navigate(`/order`, { state: { orderId: jsonRes.data.orderId } });
+          // navigate(`/order`, { state: { orderId: jsonRes.data.orderId } });
+          navigate(`/order`, {
+            state: {
+              orderId: jsonRes.data.orderId,
+              tossOrderId: jsonRes.data.tossOrderId,
+            },
+          });
         })
         .catch((error) => {
           console.error(`장바구니 내 선택된 아이템 주문 생성 실패 : `, error);
