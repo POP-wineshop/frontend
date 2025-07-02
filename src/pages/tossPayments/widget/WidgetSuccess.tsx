@@ -15,7 +15,7 @@ export function WidgetSuccess() {
         paymentKey: searchParams.get('paymentKey'),
       };
 
-      console.log(requestData);
+      console.log('requestData: ', requestData);
       // const orderIdInNumber = requestData.orderId?.split('_')[2];
 
       try {
