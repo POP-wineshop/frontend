@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 export function WidgetSuccess() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [responseData, setResponseData] = useState(null);
+  const hasCalled = useRef(false);
 
   useEffect(() => {
     async function confirm() {
@@ -54,8 +55,10 @@ export function WidgetSuccess() {
       }
     }
 
+    if (hasCalled.current) return;
+    hasCalled.current = true;
     confirm();
-  }, [searchParams]);
+  }, []);
 
   return (
     <>
