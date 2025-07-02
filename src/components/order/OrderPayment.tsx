@@ -79,7 +79,7 @@ const OrderPayment = ({ orderInfo }: OrderInfoProps) => {
               navigate('/tosspayments', {
                 // 현재 주문 정보에서 userId를 받아오지 않으므로 하드코딩
                 state: {
-                  tossOrderId: orderInfo.tossOrderId,
+                  orderId: orderInfo.tossOrderId,
                   userId: 4,
                   totalPrice: orderInfo.totalPrice,
                 },
