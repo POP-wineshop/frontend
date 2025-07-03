@@ -50,6 +50,8 @@ export function WidgetSuccess() {
         }
 
         setResponseData(json);
+        alert('결제 확인 화면으로 이동합니다');
+        navigate('/');
       } catch (error: any) {
         navigate(`/fail?code=${error.code}&message=${error.message}`);
       }
