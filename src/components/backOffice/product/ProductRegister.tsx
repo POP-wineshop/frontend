@@ -65,32 +65,31 @@ const ProductRegister = () => {
       });
   };
 
-  useEffect(() => {
-    const fetchAll = async () => {
-      const promises = sampleProductReqList.map((req) =>
-        fetch(`http://localhost:8080/api/admin/wines`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(req),
-        })
-          .then((res) => res.json())
-          .then((jsonRes) => {
-            console.log(`POST 요청 성공 : `, jsonRes.data);
-            // alert(`POST 요청 성공! : ${jsonRes.data}`);
-          })
-          .catch((err) => {
-            console.error(`POST 요청 실패 : `, err);
-            // alert(`POST 요청 실패 ㅠ : ${err}`);
-          })
-      );
+  // 컴포넌트 렌더링 시 설정된 데이터 자동 fetch
+  // useEffect(() => {
+  //   const fetchAll = async () => {
+  //     fetch(`http://localhost:8080/api/admin/wines`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(sampleProductReqList),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((jsonRes) => {
+  //         console.log('모든 요청 완료됨:', jsonRes.data);
+  //         return jsonRes.data; // 데이터만 리턴
+  //       })
+  //       .catch((err) => {
+  //         console.error(`POST 요청 실패 : `, err);
+  //         return null; // 실패한 요청도 Promise.all에서 안 끊기게 처리
+  //       });
 
-      await Promise.all(promises);
-    };
+  //     alert('모든 요청 완료!');
+  //   };
 
-    fetchAll();
-  }, []);
+  //   fetchAll();
+  // }, [sampleProductReqList]);
 
   return (
     <>
