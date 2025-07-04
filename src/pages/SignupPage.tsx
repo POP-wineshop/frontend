@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
   const [userName, setUserName] = useState<string>('');
@@ -113,6 +113,17 @@ const SignupPage = () => {
           >
             회원 가입
           </button>
+          <div className="text-center">
+            <span className="text-sm text-gray-600">
+              이미 계정이 있으신가요?{' '}
+            </span>
+            <Link
+              to="/login"
+              className="text-sm text-blue-600 hover:underline font-medium"
+            >
+              로그인
+            </Link>
+          </div>
         </form>
       </div>
     </>

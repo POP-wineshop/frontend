@@ -15,13 +15,18 @@ type Order = {
   orderStatus: string;
   orderItems: OrderItem[];
   totalPrice: number;
+
+  // 주문 일시 추가 시 불러오기
+  orderDate: string;
 };
 
 const MyPage = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
-    id: '들어갈 Id 값',
-    name: '들어갈 이름 값',
+    id: 'testuser01',
+    name: '김예시',
+    email: 'testuseremail@example.com',
+    phoneNumber: '010-XXXX-XXXX',
   });
   const [orderList, setOrderList] = useState<Order[]>([]);
 
@@ -35,7 +40,7 @@ const MyPage = () => {
       .then((jsonRes) => {
         setOrderList(jsonRes.data);
       });
-  });
+  }, []);
 
   const handleRequestOrderCancel = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -60,15 +65,152 @@ const MyPage = () => {
     <div className="w-full flex flex-col items-center">
       <div className="w-[800px]">
         <div className="py-8">
-          <span className="text-[48px] font-bold italic">MyPage</span>
+          <span className="text-[48px] font-bold italic">My Page</span>
         </div>
 
-        <div className="mb-6">
-          <p className="text-lg font-bold">아이디: {userInfo.id}</p>
-          <p className="text-lg font-bold">이름: {userInfo.name}</p>
-          <button className="mt-2 underline text-blue-500">
-            비밀번호 변경
-          </button>
+        <div className="space-y-6 p-6">
+          {/* 아이디 */}
+          <div>
+            <label
+              htmlFor="userId"
+              className="block text-lg font-semibold text-gray-800 mb-2"
+            >
+              아이디 <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="userId"
+              type="text"
+              placeholder={userInfo.id}
+              defaultValue={userInfo.id}
+              className="w-full px-4 py-2 border border-gray-300 text-gray-300 rounded-md focus:outline-none focus:ring-2"
+              readOnly
+            />
+            <p className="text-xs text-gray-500 mt-2">
+              (영문 소문자 / 숫자 / 특수문자 포함 4~16자)
+            </p>
+          </div>
+
+          {/* 이름 */}
+          <div>
+            <label
+              htmlFor="userName"
+              className="block text-lg font-semibold text-gray-800 mb-2"
+            >
+              이름 <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="userName"
+              type="text"
+              placeholder={userInfo.name}
+              defaultValue={userInfo.name}
+              className="w-full px-4 py-2 border border-gray-300 text-gray-300 rounded-md focus:outline-none focus:ring-2"
+              readOnly
+            />
+          </div>
+
+          {/* 전화번호 */}
+          <div>
+            <label
+              htmlFor="mobile1"
+              className="block text-lg font-semibold text-gray-800 mb-2"
+            >
+              전화번호 <span className="text-red-500">*</span>
+            </label>
+
+            <div className="flex justify-between items-center gap-2">
+              <select
+                id="mobile1"
+                name="mobile1"
+                className="w-[120px] px-4 py-2 border border-gray-300 text-center rounded-md focus:outline-none focus:ring-2"
+                value={userInfo.phoneNumber.split('-')[0]}
+
+                // onChange={handleChange}
+              >
+                <option value="010">010</option>
+                <option value="011">011</option>
+                <option value="016">016</option>
+                <option value="017">017</option>
+                <option value="018">018</option>
+                <option value="019">019</option>
+              </select>
+
+              <span>-</span>
+
+              <input
+                type="text"
+                id="mobile2"
+                name="mobile2"
+                maxLength={4}
+                placeholder="XXXX"
+                className="w-1/3 px-4 py-2 border border-gray-300 text-center rounded-md focus:outline-none focus:ring-2"
+                defaultValue={userInfo.phoneNumber.split('-')[1]}
+                // onChange={handleChange}
+              />
+
+              <span>-</span>
+
+              <input
+                type="text"
+                id="mobile3"
+                name="mobile3"
+                maxLength={4}
+                placeholder="XXXX"
+                className="w-1/3 px-4 py-2 border border-gray-300 text-center rounded-md focus:outline-none focus:ring-2"
+                defaultValue={userInfo.phoneNumber.split('-')[2]}
+                // onChange={handleChange}
+              />
+            </div>
+
+            <button
+              type="button"
+              className="mt-2 text-sm text-blue-600 hover:underline"
+              // onClick={handleSendVerification}
+            >
+              인증번호 받기
+            </button>
+
+            {/* 성공/실패 메시지는 조건부 렌더링
+            {sendFail && (
+              <p className="text-sm text-red-500 mt-1">
+                인증번호 발송에 실패했습니다.
+              </p>
+            )}
+            {sendSuccess && (
+              <ul className="text-sm text-green-600 mt-1">
+                <li>인증번호가 발송되었습니다.</li>
+                <li>받지 못했다면 번호를 다시 확인하세요.</li>
+              </ul>
+            )} */}
+          </div>
+
+          {/* 이메일 */}
+          <div>
+            <label
+              htmlFor="eamil"
+              className="block text-lg font-semibold text-gray-800 mb-2"
+            >
+              이메일 <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="email"
+              type="text"
+              placeholder={userInfo.email}
+              defaultValue={userInfo.email}
+              className="w-full px-4 py-2 border border-gray-300 text-gray-300 rounded-md focus:outline-none focus:ring-2"
+            />
+          </div>
+
+          <div className="flex justify-between gap-4">
+            <button className="w-1/3 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+              회원 정보 수정
+            </button>
+            <button className="w-1/3 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+              비밀번호 변경
+            </button>
+            <button className="w-1/3 px-4 py-2 bg-red-400 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300">
+              회원 탈퇴
+            </button>
+          </div>
         </div>
 
         <div className="my-6">
@@ -79,13 +221,17 @@ const MyPage = () => {
                 <div className="border px-4 py-2 cursor-pointer hover:bg-gray-100">
                   <div className="flex items-center w-full">
                     <div className="flex w-full">
-                      <span className="font-semibold border-r text-center px-2 w-1/3">
+                      <span className="font-semibold border-r text-center px-2 w-1/4">
                         주문 번호: {order.orderId}
                       </span>
-                      <span className="font-semibold border-r text-center px-2 w-1/3">
+                      <span className="font-semibold border-r text-center px-2 w-1/4">
+                        {/* 주문 일시: {order.orderDate} */}
+                        주문 일시: 2025년 XX월 XX일 XX:XX
+                      </span>
+                      <span className="font-semibold border-r text-center px-2 w-1/4">
                         총 금액: {order.totalPrice.toLocaleString()}원
                       </span>
-                      <span className="font-semibold text-center px-2 w-1/3">
+                      <span className="font-semibold text-center px-2 w-1/4">
                         주문 상태: {order.orderStatus}
                       </span>
                     </div>
